@@ -1,0 +1,77 @@
+// .candaraFont13 {
+//   font-family: 'Candara, Georgia, serif';
+//   font-size: 13px;
+// }
+.idDataTable table td {
+  font-size: 4px !important;
+}
+.text-start {
+  font-size: 4px !important;
+}
+.btn-download-dados {
+  position: absolute;
+  right: 0
+}
+.btn-download-dados button span i {
+  margin-right: 10px;
+}
+.div-grid {
+  border-radius: 4px;
+  margin-top: 10px;
+  // box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none !important;
+}
+.v-sheet button.success {
+  background: #FFF !important;
+  border-color: #FFF !important;
+  color: #000 !important;
+}
+.v-data-table__wrapper {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.v-data-table-header span {
+  font-size: 12px;
+  color: #000
+}
+.v-data-table tbody tr td.text-start {
+  font-size: 12px !important;
+}
+.v-data-table tbody tr td.text-start button {
+    background: #fff;
+    color: #000;
+    padding: 3px 5px;
+    border-radius: 2px;
+    margin: 2px 0;
+}
+.v-data-table tbody tr td.text-start button.mdi-delete {
+  background: rgba(213,0,0, 0.8);
+}
+.v-data-table tbody tr td.text-start button.mdi-pencil {
+  background: rgba(13,71,161, 0.8);
+}
+.v-data-table tbody tr td.text-start button.mdi-cash {
+  background: #1B5E20;
+}
+.v-data-table tbody tr td.text-start button.mdi-account-arrow-right-outline {
+  background: #BF360C;
+}
+
+.v-data-table tbody tr td.text-start button.mdi-arrow-right{
+  background: #33691E;
+}
+
+.v-data-table tbody tr td.text-start button.mdi-border-all {
+  background: #4A148C;
+}
+
+.v-data-table tbody tr td.text-start button.mdi-account-arrow-right-outline::before,
+.v-data-table tbody tr td.text-start button.mdi-cash::before,
+.v-data-table tbody tr td.text-start button.mdi-pencil::before,
+.v-data-table tbody tr td.text-start button.mdi-delete::before,
+.v-data-table tbody tr td.text-start button.mdi-border-all::before,
+.v-data-table tbody tr td.text-start button.mdi-arrow-right::before{
+  color: #fff;
+}

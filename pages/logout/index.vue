@@ -1,0 +1,21 @@
+<template>
+
+  <v-overlay :value="true">
+    <v-container fluid align="center">
+      <center>
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+        <p>
+          <strong>
+            Carregando ... realizando logout do usuário
+          </strong>
+        </p>
+      </center>
+    </v-container>
+  </v-overlay>
+
+</template>
+
+<script src="./script.js"></script>
