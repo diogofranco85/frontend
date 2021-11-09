@@ -30,8 +30,6 @@ jobs:
           PORT: 22
           script: |
             cd ${{ secrets.PROJECT_PATH }}
-            echo "remover deploy antigo"
-            rm -rf ./dist
             echo "atualizando pacotes"
             npm install
             echo "buildar applicação"
