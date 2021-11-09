@@ -2,7 +2,7 @@ name: DeployNuxt
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   deploy:
