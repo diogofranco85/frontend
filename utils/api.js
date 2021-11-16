@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Headers from './headers';
 
+export const api = axios.create({
+  baseURL: process.env.BASE_URL
+});
 
-export async function post( url, param, tipoHeader, converterData){
-  const urlAcesso = process.env.BASE_URL + url
+export async function post(url, param, tipoHeader, converterData) {
 
   const headers = await Headers(tipoHeader)
   let parametro = param
@@ -11,45 +13,39 @@ export async function post( url, param, tipoHeader, converterData){
     parametro = JSON.stringify(param)
   }
 
-  return await axios.post(urlAcesso, parametro, {
-    headers,
-  })
+  return await api.post(url, parametro, {
+    headers
+  });
 
 }
 
 export async function get(url, tipoHeader) {
-  const urlAcesso = process.env.BASE_URL + url
   const headers = await Headers(tipoHeader)
 
-  return await axios.get(urlAcesso, {
-    headers,
+  return await api.get(url, {
+    headers
   })
 }
 
 export async function put(url, param, tipoHeader, converterData) {
-  const urlAcesso = process.env.BASE_URL + url
 
   const headers = await Headers(tipoHeader)
   let parametro = param
   if (converterData === 'S') {
     parametro = JSON.stringify(param)
   }
-  return await axios.put(urlAcesso, parametro, {
-    headers,
+
+  return await api.put(url, parametro, {
+    headers
   })
 }
 
 export async function del(url, tipoHeader) {
-  const urlAcesso = process.env.BASE_URL + url
   const headers = await Headers(tipoHeader)
 
-  return await axios.delete(urlAcesso, {
-    headers,
-  })
+  return await api.delete(url, {
+    headers
+  });
 }
 
-
-export const apiAuth = axios.create({
-    baseURL: process.env.BASE_URL
-})
 

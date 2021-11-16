@@ -1,12 +1,12 @@
 import { get, post, put } from "~/utils/api";
 
 export default {
-  async GET_LIST({ commit }) {
+  async GET_LIST({ commit }, payload) {
 
     commit('setLoading', true);
     commit('setError', false);
 
-    await get('/client', 'COM_TOKEN_USUARIO')
+    await get(`/farm/${payload.id}/list`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -23,7 +23,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
 
-    await get(`/client/${payload}`, 'COM_TOKEN_USUARIO')
+    await get(`/farm/${payload}`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setItem", result);
@@ -40,7 +40,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     if (payload.typeOperation !== 'edit') {
-      await post('/client', payload.data, 'COM_TOKEN_USUARIO')
+      await post('/farm', payload.data, 'COM_TOKEN_USUARIO')
         .then(() => {
           commit('setLoading', false);
           commit('setMessage', 'Cliente incluído com sucesso');
@@ -51,7 +51,7 @@ export default {
           commit('setMessage', 'Não foi possivél salvar os dados. Se persistir entre em contato com o suporte. ' + err.response.data.message);
         });
     } else {
-      await put(`/client/${payload.data.id}`, payload.data, 'COM_TOKEN_USUARIO')
+      await put(`/farm/${payload.data.id}`, payload.data, 'COM_TOKEN_USUARIO')
         .then(() => {
           commit('setLoading', false);
           commit('setMessage', 'Cliente alterado com sucesso');

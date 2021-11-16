@@ -1,9 +1,9 @@
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   layout: 'blank',
   data: () => ({
-    formData : {
+    formData: {
       email: process.env.NODE_ENV == 'development' ? 'diogo.franco85@gmail.com' : '',
       password: process.env.NODE_ENV == 'development' ? '150398' : ''
     },
@@ -23,31 +23,49 @@ export default {
     ...mapGetters({
       'auth': 'Auth/getAuth',
       'user': 'Auth/getUser',
+      'message': 'Auth/getMessage',
+      'error': 'Auth/getError'
     })
   },
 
   watch: {
-    auth(value){
-      if(value === true){
-        this.$router.push({name: 'home'});
+    auth(value) {
+      if (value === true) {
+        this.$router.push({ name: 'home' });
       }
     },
 
-    // user(value){
-    //   console.log('user', value);
-    // }
+    error(value) {
+      if (value == true) {
+        this.$swal.fire({
+          type: 'error',
+          title: 'Falha no login',
+          text: this.message
+        })
+      }
+    }
+  },
+
+  mounted() {
+    if (this.error === true) {
+      this.$swal.fire({
+        type: 'error',
+        title: 'Falha no login',
+        text: this.message
+      })
+    }
   },
 
   methods: {
-    loginRequest(){
+    loginRequest() {
       this.loading = true;
       if (this.$refs.form.validate()) {
         this.$store.dispatch('Auth/GET_AUTHENTICATE', this.formData)
-          .then( () => {
+          .then(() => {
             this.loading = false;
             this.$router.push('/home');
           });
-      }else{
+      } else {
         this.loading = false;
       }
     }
