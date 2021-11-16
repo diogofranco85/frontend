@@ -52,11 +52,19 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
-    'nuxt-sweetalert2'
+    'nuxt-sweetalert2',
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
+
+  proxy: {
+    '/api': {
+      target: process.env.BASE_URL,
+      changeOrigin: false
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
