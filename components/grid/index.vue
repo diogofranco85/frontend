@@ -20,13 +20,14 @@
           <v-toolbar v-if="titulo" flat dark dense :outlined="true" :color="toolbarColor">
             <v-toolbar-title>{{ titulo }}</v-toolbar-title>
             <div class="btn-download-dados" >
-              <vue-json-to-csv
+
+                <vue-json-to-csv
                 v-if="exportarExcel === true && items.length > 0"
                 :json-data="items"
                 :csv-title="getDate()"
               >
 
-                <v-tooltip left>
+                <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       color="success"
@@ -42,19 +43,38 @@
 
               </vue-json-to-csv>
 
-               <v-btn color="primary" class="mr-2" @click="handleBtnNovo" >
-                  <i class="mdi mdi-plus" aria-hidden="true"></i>
-<!--                  ADICIONAR NOVO-->
-                </v-btn>
-                <v-btn
-                  color="light" class="mr-2" @click="handleBtnAtualizar"
-                >
-                  <v-icon
-                  >
-                   mdi-refresh
-                  </v-icon>
-<!--                  ATUALIZAR-->
-                </v-btn>
+              <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      class="mr-2"
+                      @click="handleBtnNovo"
+                      v-bind="attrs"
+                      v-on="on">
+                        <i class="mdi mdi-plus" aria-hidden="true"></i>
+      <!--                  ADICIONAR NOVO-->
+                      </v-btn>
+                  </template>
+                   <span>Adicionar novo</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="light"
+                      class="mr-2"
+                      @click="handleBtnAtualizar"
+                      v-bind="attrs"
+                      v-on="on">
+                      <v-icon
+                      >
+                      mdi-refresh
+                      </v-icon>
+    <!--                  ATUALIZAR-->
+                    </v-btn>
+                  </template>
+                  <span>Atualizar dados</span>
+                </v-tooltip>
             </div>
           </v-toolbar>
           <v-divider class="mx-4" inset vertical />

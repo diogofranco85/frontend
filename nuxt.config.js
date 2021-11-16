@@ -10,7 +10,7 @@ export default {
     titleTemplate: '%s - HydroWater',
     title: 'Gestão de autorgas',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'pt-BR'
     },
     meta: [
       { charset: 'utf-8' },
@@ -20,8 +20,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
-      { rel: 'preconnect', href:'https://fonts.googleapis.com'},
-      { rel: 'preconnect', href:'https://fonts.gstatic.com'},
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap' }
     ]
   },
@@ -34,7 +34,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/vuex-persist', ssr: false }
+    { src: '~/plugins/vuex-persist', ssr: false },
+    { src: '~/plugins/v-mask', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

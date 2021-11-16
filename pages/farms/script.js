@@ -1,4 +1,5 @@
 import { mapGetters } from "vuex";
+import { maskCNPJ } from '../../utils/mask';
 
 export default {
   middleware: ['auth'],
@@ -9,16 +10,19 @@ export default {
     formActionInsertOrEdit: true,
     formAction: 'new',
     formModal: false,
+    clientData: {
+      name: '',
+      id: '',
+      document: '',
+      phone: '',
+      city: ''
+    },
     formData: {
       id: null,
-      name: '',
-      document: '',
-      address: '',
-      num: '',
-      district: '',
-      city: '',
-      state: '',
-      phone: ''
+      id_client: '',
+      farm: '',
+      longitude: '',
+      latitude: '',
     },
     rulesRequired: [
       (v) => !!v || 'Este campo é obrigatório',
@@ -29,15 +33,16 @@ export default {
     ],
     items: [
       { text: 'Home', to: "home", nuxt: true },
-      { text: 'Clientes', to: "clients", disabled: true },
+      { text: 'Clientes', to: "clients", nuxt: true },
+      { text: 'Fazendas', to: "farms", disabled: true },
     ],
     loading: false,
     itemsGrid: [],
     headerGrid: [
       { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
-      { text: 'Empresa', value: 'name', class: 'blue-grey lighten-4' },
-      { text: 'Cidade', value: 'city', class: 'blue-grey lighten-4' },
-      { text: 'Estado', value: 'state', class: 'blue-grey lighten-4' },
+      { text: 'Fazenda', value: 'farm', class: 'blue-grey lighten-4' },
+      { text: 'latitude', value: 'latitude', class: 'blue-grey lighten-4' },
+      { text: 'longitude', value: 'longitude', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
     ],
     gridActions: [
@@ -59,7 +64,7 @@ export default {
         id: 3,
         icon: 'mdi-arrow-right',
         evento: 2,
-        tooltip: 'Cadastro de Fazendas',
+        tooltip: 'Cadastro de outorgas',
         color: "blue-grey darken-80"
       }
 
@@ -68,10 +73,10 @@ export default {
 
   computed: {
     ...mapGetters({
-      dataStore: 'Client/getData',
-      itemStore: 'Client/getItem',
-      vuexMessage: 'Client/getMessage',
-      vuexError: 'Client/getError'
+      dataStore: 'Farm/getData',
+      itemStore: 'Farm/getItem',
+      vuexMessage: 'Farm/getMessage',
+      vuexError: 'Farm/getError'
     })
   },
 
@@ -80,14 +85,10 @@ export default {
       if (value !== {}) {
 
         this.formData.id = value.id;
-        this.formData.name = value.name;
-        this.formData.document = value.document;
-        this.formData.address = value.address;
-        this.formData.num = value.num;
-        this.formData.district = value.district;
-        this.formData.state = value.state;
-        this.formData.city = value.city;
-        this.formData.phone = value.phone
+        this.formData.id_client = value.id_client;
+        this.formData.farm = value.farm;
+        this.formData.longitude = value.longitude;
+        this.formData.latitude = value.latitude;
         this.formModal = true
         this.loading = false;
       }
@@ -100,20 +101,18 @@ export default {
     },
 
     vuexError(value) {
-      console.log('vuexerror', value);
       if (value === true) {
         this.$swal.fire({
           type: 'error',
           title: 'Notificação de error',
-          message: this.vuexMessage
+          text: this.vuexMessage
         })
       } else {
-        console.log('vuexmessage', this.vuexMessage);
         if (this.vuexMessage !== '') {
           this.$swal.fire({
             type: 'success',
             title: 'Notificação de sucesso',
-            message: this.vuexMessage
+            text: this.vuexMessage
           })
         }
       }
@@ -130,19 +129,16 @@ export default {
 
     clearForm() {
       this.formData.id = null;
-      this.formData.name = '';
-      this.formData.document = '';
-      this.formData.address = '';
-      this.formData.num = '';
-      this.formData.district = '';
-      this.formData.state = '';
-      this.formData.city = '';
-      this.formData.phone = ''
+      this.formData.id_client = '';
+      this.formData.farm = '';
+      this.formData.longitude = '';
+      this.formData.latitude = '';
     },
 
     loadData() {
       this.loading = true;
-      this.$store.dispatch('Client/GET_LIST');
+      this.clientData = this.$route.params;
+      this.$store.dispatch('Farm/GET_LIST', { id: this.clientData.id });
       this.loading = false;
     },
 
@@ -157,7 +153,7 @@ export default {
         this.formAction = 'edit'
         this.formActionInsertOrEdit = true;
         this.loading = true;
-        this.$store.dispatch('Client/GET_ITEM', params.id);
+        this.$store.dispatch('Farm/GET_ITEM', params.id);
       } catch (err) {
         this.$swal.fire({
           type: 'error',
@@ -171,12 +167,13 @@ export default {
     viewData(params) {
       this.formActionInsertOrEdit = false;
       this.loading = true;
-      this.$store.dispatch('Client/GET_ITEM', params.id);
+      this.$store.dispatch('Farm/GET_ITEM', params.id);
     },
 
     async saveData() {
       this.loading = true;
-      this.$store.dispatch('Client/SET_DATA', {
+      this.formData.id_client = this.clientData.id;
+      this.$store.dispatch('Farm/SET_DATA', {
         typeOperation: this.formAction,
         data: this.formData
       })
@@ -184,14 +181,14 @@ export default {
           this.$swal.fire({
             type: 'success',
             title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
-            text: this.formAction !== 'edit' ? 'Cliente inserido com sucesso' : 'Cliente editado com sucesso'
+            text: this.formAction !== 'edit' ? 'Fazenda inserida com sucesso' : 'Fazenda editada com sucesso'
           })
         })
         .catch(() => {
-          his.$swal.fire({
+          this.$swal.fire({
             type: 'error',
             title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
-            text: this.formAction !== 'edit' ? 'Error ao inserir os dados' : 'Erro ao editar cliente'
+            text: this.formAction !== 'edit' ? 'Error ao inserir os dados' : 'Erro ao editar fazenda'
           })
         });
 
@@ -206,6 +203,14 @@ export default {
         'name': 'farms',
         params
       })
+    },
+
+    formatCNPJ() {
+
+      const cnpj = maskCNPJ(clientData.document);
+      console.log('formatar cnpj', cnpj);
+      return '';
+
     }
   }
 }

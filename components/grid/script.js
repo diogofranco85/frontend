@@ -14,7 +14,10 @@ export default {
     },
     titulo: String,
     headers: Array,
-    items: Array,
+    items: {
+      type: Array,
+      default: [],
+    },
     loading: Boolean,
     textoToolTipAcao: String,
     eventoDetalhar: Function,
