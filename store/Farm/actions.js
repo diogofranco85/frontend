@@ -36,6 +36,14 @@ export default {
       });
   },
 
+  async GET_CLIENT({ commit }, payload) {
+    commit('setLoading', true);
+    commit('setError', false);
+    if (payload) {
+      commit('setClient', payload);
+    };
+  },
+
   async SET_DATA({ commit }, payload) {
     commit('setLoading', true);
     commit('setError', false);
@@ -45,7 +53,7 @@ export default {
           commit('setLoading', false);
           commit('setMessage', 'Cliente incluído com sucesso');
         })
-        .catch(() => {
+        .catch((err) => {
           commit('setLoading', false);
           commit('setError', true);
           commit('setMessage', 'Não foi possivél salvar os dados. Se persistir entre em contato com o suporte. ' + err.response.data.message);
@@ -62,6 +70,11 @@ export default {
           commit('setMessage', 'Não foi possivél salvar os dados. Se persistir entre em contato com o suporte. ' + err.response.data.message);
         })
     }
+  },
+
+  async LIMPAR_MENSAGEM({ commit }) {
+    commit('setMessage', '');
+    commit('setError', false);
   }
 
 }

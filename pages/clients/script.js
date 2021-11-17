@@ -99,27 +99,27 @@ export default {
       }
     },
 
-    vuexError(value) {
-      console.log('vuexerror', value);
-      if (value === true) {
-        this.$swal.fire({
-          type: 'error',
-          title: 'Notificação de error',
-          message: this.vuexMessage
-        })
-      } else {
-        console.log('vuexmessage', this.vuexMessage);
-        if (this.vuexMessage !== '') {
+    vuexMessage(value) {
+      if (value !== '') {
+        if (this.vuexError === true) {
+          this.$swal.fire({
+            type: 'error',
+            title: 'Notificação do sistema - Error',
+            text: value
+          })
+        } else {
           this.$swal.fire({
             type: 'success',
-            title: 'Notificação de sucesso',
-            message: this.vuexMessage
+            title: 'Notificação do sistema - Sucesso',
+            text: value
           })
+
+          this.formModal = false;
+          this.loading = false;
+          this.loadData();
         }
       }
-
-      this.formModal = false;
-    }
+    },
   },
 
   async mounted() {
@@ -179,31 +179,16 @@ export default {
       this.$store.dispatch('Client/SET_DATA', {
         typeOperation: this.formAction,
         data: this.formData
-      })
-        .then(() => {
-          this.$swal.fire({
-            type: 'success',
-            title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
-            text: this.formAction !== 'edit' ? 'Cliente inserido com sucesso' : 'Cliente editado com sucesso'
-          })
-        })
-        .catch(() => {
-          his.$swal.fire({
-            type: 'error',
-            title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
-            text: this.formAction !== 'edit' ? 'Error ao inserir os dados' : 'Erro ao editar cliente'
-          })
-        });
+      });
 
       this.formModal = false;
-      this.loading = false;
-      this.loadData();
+
 
     },
 
     toFarm(params) {
       this.$router.push({
-        'name': 'farms',
+        name: 'farms',
         params
       })
     }

@@ -17,6 +17,11 @@ export default function (props) {
   api.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
+
+    if (error.message === 'Network Error') {
+      alert('Não foi possível conectar ao servidor de dados. \n Se o error persistir favor entrar em contato com a Hype Tecnologia');
+    }
+
     const status = error.response.status;
     if (status === 401) {
       store.dispatch('Auth/SET_MESSAGE_ERROR_LOGIN')

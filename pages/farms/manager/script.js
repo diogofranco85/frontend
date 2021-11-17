@@ -1,5 +1,5 @@
 import { mapGetters } from "vuex";
-import { maskCNPJ } from '~/utils/mask';
+import { maskCNPJ } from '../../../utils/mask';
 
 export default {
   middleware: ['auth'],
@@ -10,12 +10,11 @@ export default {
     formActionInsertOrEdit: true,
     formAction: 'new',
     formModal: false,
-    clientData: {
-      name: '',
+    farmData: {
       id: '',
-      document: '',
-      phone: '',
-      city: ''
+      farm: '',
+      longitude: '',
+      latitude: ''
     },
     formData: {
       id: null,
@@ -35,6 +34,7 @@ export default {
       { text: 'Home', to: "home", nuxt: true },
       { text: 'Clientes', to: "clients", nuxt: true },
       { text: 'Fazendas', to: "farms", disabled: true },
+      { text: 'Hidrometro', to: "hidrometro", disabled: true },
     ],
     loading: false,
     itemsGrid: [],
@@ -73,22 +73,14 @@ export default {
 
   computed: {
     ...mapGetters({
-      itemClient: 'Farm/getClient',
       dataStore: 'Farm/getData',
       itemStore: 'Farm/getItem',
-      message: 'Farm/getMessage',
-      error: 'Farm/getError'
+      vuexMessage: 'Farm/getMessage',
+      vuexError: 'Farm/getError'
     })
   },
 
   watch: {
-    itemClient(value) {
-      if (value !== {}) {
-        this.clientData = { ...value };
-        this.loadDataGrid();
-      }
-    },
-
     itemStore(value) {
       if (value !== {}) {
 
@@ -108,40 +100,29 @@ export default {
       }
     },
 
-    message(value) {
-
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('vuex message', value);
-      }
-
-      if (value !== '') {
-        if (this.error === true) {
-          this.$swal.fire({
-            type: 'error',
-            title: 'Notificação do sistema',
-            text: value
-          })
-        } else {
+    vuexError(value) {
+      if (value === true) {
+        this.$swal.fire({
+          type: 'error',
+          title: 'Notificação de error',
+          text: this.vuexMessage
+        })
+      } else {
+        if (this.vuexMessage !== '') {
           this.$swal.fire({
             type: 'success',
-            title: 'Notificação do sistema',
-            text: value
-          });
+            title: 'Notificação de sucesso',
+            text: this.vuexMessage
+          })
         }
       }
 
-      this.$store.dispatch('Farm/LIMPAR_MENSAGEM');
-      this.loadDataGrid();
-    },
+      this.formModal = false;
+    }
   },
 
-  async created() {
+  async mounted() {
     await this.loadData();
-
-    var farm = this.$store.state.Farm;
-    if (!farm.client.id) {
-      this.$router.push('/clients');
-    }
   },
 
   methods: {
@@ -155,11 +136,11 @@ export default {
     },
 
     loadData() {
-      this.$store.dispatch('Farm/GET_CLIENT', this.$route.params);
-    },
-
-    loadDataGrid() {
-      this.$store.dispatch('Farm/GET_LIST', { id: this.clientData.id });
+      this.loading = true;
+      this.farmData = this.$route.params.farm;
+      console.log(this.farmData);
+      //this.$store.dispatch('Farm/GET_LIST', { id: this.clientData.id });
+      this.loading = false;
     },
 
     newData() {
@@ -191,54 +172,49 @@ export default {
     },
 
     async saveData() {
-
-      if (this.validate()) {
-        return;
-      }
-
       this.loading = true;
       this.formData.id_client = this.clientData.id;
       this.$store.dispatch('Farm/SET_DATA', {
         typeOperation: this.formAction,
         data: this.formData
       })
+        .then(() => {
+          this.$swal.fire({
+            type: 'success',
+            title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
+            text: this.formAction !== 'edit' ? 'Fazenda inserida com sucesso' : 'Fazenda editada com sucesso'
+          })
+        })
+        .catch(() => {
+          this.$swal.fire({
+            type: 'error',
+            title: this.formAction !== 'edit' ? 'Novo Cadastro' : 'Editar registro',
+            text: this.formAction !== 'edit' ? 'Error ao inserir os dados' : 'Erro ao editar fazenda'
+          })
+        });
 
       this.formModal = false;
       this.loading = false;
+      this.loadData();
+
     },
 
-    validate() {
-      let message = '';
-      let error = false;
-
-      if (!this.formData.farm) {
-        message = 'O nome da fazenda não pode ficar em branco';
-        error = true;
-      }
-
-      if (!this.formData.longitude) {
-        message = 'O campo longitude não pode ficar em branco';
-        error = true;
-      }
-
-      if (!this.formData.latitude) {
-        message = 'O campo latitude não pode ficar em branco';
-        error = true;
-      }
-
-      if (error === true) {
-        this.$swal.fire({ type: 'error', title: 'Validação de campos', text: message });
-        return true
-      }
-
-      return false;
-    },
-
-    toPage(params) {
+    toFarm(params) {
       this.$router.push({
-        'name': 'farms',
-        params
+        'name': 'farms/manager',
+        params: {
+          farm: params,
+          client: this.clientData.id
+        }
       })
     },
+
+    formatCNPJ() {
+
+      const cnpj = maskCNPJ(clientData.document);
+      console.log('formatar cnpj', cnpj);
+      return '';
+
+    }
   }
 }

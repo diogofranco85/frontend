@@ -11,7 +11,7 @@
         </strong>
       </p>
     </v-overlay>
-    <TopBar title="Gerenciamento de fazendas"/>
+    <TopBar title="Gerenciamento de Hidrometro"/>
     <v-breadcrumbs :items="items">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
@@ -22,11 +22,11 @@
           Dados do cliente
         </h3>
         <v-row class="ma-2">
-            <v-col md="4">
+            <v-col md="8">
                 <v-text-field
-                  label="Empresa"
+                  label="Fazenda"
                   outlined
-                  v-model="clientData.name"
+                  v-model="farmData.farm"
                   :disabled="true"
                 />
             </v-col>
@@ -34,8 +34,7 @@
                 <v-text-field
                   label="CNPJ"
                   outlined
-                  v-mask="'##.###.###/####-##'"
-                  v-model="clientData.document"
+                  v-model="farmData.longitude"
                   :disabled="true"
                 />
             </v-col>
@@ -43,16 +42,7 @@
                 <v-text-field
                   label="Telefone"
                   outlined
-                  v-mask="'(##) #####-####'"
-                  v-model="clientData.phone"
-                  :disabled="true"
-                />
-            </v-col>
-            <v-col md="2">
-                <v-text-field
-                  label="Cidade"
-                  outlined
-                  v-model="clientData.city"
+                  v-model="farmData.latitude"
                   :disabled="true"
                 />
             </v-col>
@@ -62,12 +52,12 @@
       :headers="headerGrid"
       :toolbarColor="'grey darken-1'"
       :items="datagrid"
-      :titulo="'Listagem de fazendas'"
+      :titulo="'Listagem de hidrometro'"
       :actions="gridActions"
       :handleBtnNovo="newData"
       :handleBtnAtualizar="loadData"
       :evento1="editData"
-      :evento2="toPage"
+      :evento2="toFarm"
       :evento3="viewData"
       :loading="loading"
     ></Grid>
