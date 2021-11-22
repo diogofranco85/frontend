@@ -20,6 +20,7 @@ export default function (props) {
 
     if (error.message === 'Network Error') {
       alert('Não foi possível conectar ao servidor de dados. \n Se o error persistir favor entrar em contato com a Hype Tecnologia');
+      redirect('/logout');
     }
 
     const status = error.response.status;

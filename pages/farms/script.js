@@ -221,7 +221,7 @@ export default {
         error = true;
       }
 
-      if (!this.formData.latitude) {
+      if (!this.formData.latitude === '') {
         message = 'O campo latitude não pode ficar em branco';
         error = true;
       }
@@ -236,7 +236,7 @@ export default {
 
     toPage(params) {
       this.$router.push({
-        'name': 'farms',
+        'name': 'farms-manager',
         params
       })
     },

@@ -1,3 +1,35 @@
+import { mapGetters } from 'vuex';
+
 export default {
-  middleware: ['auth']
+  data: () => ({
+    selectClient: [],
+    selectFarm: [],
+  }),
+  middleware: ['auth'],
+
+  computed: {
+    ...mapGetters({
+      client: 'Client/getData'
+    })
+  },
+
+  mounted() {
+    this.loadData();
+  },
+
+  watch: {
+    client(value) {
+      if (value !== []) {
+        value.map(item => {
+          this.selectClient.push({ text: item.name, value: item.id })
+        })
+      }
+    }
+  },
+
+  methods: {
+    loadData() {
+      this.$store.dispatch('Client/GET_LIST');
+    }
+  }
 }
