@@ -8,6 +8,10 @@ export default {
     state.item = payload;
   },
 
+  setClient(state, payload) {
+    state.client = payload;
+  },
+
   setLoading(state, payload) {
     state.loading = payload;
   },

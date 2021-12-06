@@ -1,21 +1,25 @@
 export default {
-  getData(state){
+  getData(state) {
     return state.data;
   },
 
-  getItem(state){
+  getItem(state) {
     return state.item;
   },
 
-  getLoading(state){
+  getClient(state) {
+    return state.client;
+  },
+
+  getLoading(state) {
     return state.loading;
   },
 
-  getError(state){
+  getError(state) {
     return state.error;
   },
 
-  getMessage(state){
+  getMessage(state) {
     return state.message;
   },
 

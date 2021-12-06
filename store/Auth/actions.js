@@ -8,10 +8,10 @@ export default {
 
     post('/session', payload, 'SEM_TOKEN_JSON')
       .then(response => {
-        const { data } = response;
+        const { result } = response.data;
         commit('setAuth', true);
-        commit("setToken", data.access_token);
-        commit('setUser', data.user[0]);
+        commit("setToken", result.token);
+        commit('setUser', result.user);
       })
       .catch(err => {
         commit('setError', true);

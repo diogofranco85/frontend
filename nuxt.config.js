@@ -35,7 +35,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
-    { src: '~/plugins/v-mask', ssr: false }
+    { src: '~/plugins/v-mask', ssr: false },
+    { src: '~/plugins/google-maps', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -53,18 +54,11 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
     'nuxt-sweetalert2',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
-
-  proxy: {
-    '/api': {
-      target: process.env.BASE_URL,
-      changeOrigin: false
-    }
-  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -87,5 +81,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: [/^vue2-google-maps($|\/)/]
   }
 }
