@@ -4,6 +4,7 @@ export default {
   data: () => ({
     selectClient: [],
     selectFarm: [],
+    modelMessage: false,
   }),
   middleware: ['auth'],
 
@@ -29,12 +30,24 @@ export default {
           this.selectClient.push({ text: item.name, value: item.id })
         })
       }
+    },
+
+    modelMessage(value) {
+      console.log('model', value);
     }
   },
 
   methods: {
     loadData() {
       this.$store.dispatch('Client/GET_LIST');
+    },
+
+    abrirModal() {
+      this.modelMessage = true;
+    },
+
+    closeModal() {
+      this.modelMessage = false;
     }
   }
 }

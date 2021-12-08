@@ -39,7 +39,7 @@
       <v-spacer />
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on" @click="account">
             <v-icon dense> mdi-account-circle </v-icon>
           </v-btn>
         </template>
@@ -117,7 +117,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "HydroWatter",
+      title: "HydroWater",
     };
   },
 
@@ -132,6 +132,10 @@ export default {
         const user = JSON.parse(str);
         this.NomeUsuario = user.name;
       }
+    },
+
+    account() {
+      this.$router.push("/users/account");
     },
   },
 };

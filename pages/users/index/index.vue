@@ -6,7 +6,7 @@
         <strong> Carregando ... </strong>
       </p>
     </v-overlay>
-    <TopBar title="Gerenciamento de períodos de lançamentos" />
+    <TopBar title="Gerenciamento de usuários" />
     <v-breadcrumbs :items="items">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
@@ -16,7 +16,7 @@
       :headers="headerGrid"
       :toolbarColor="'grey darken-1'"
       :items="datagrid"
-      :titulo="'Listagem de períodos de lançamentos'"
+      :titulo="'Listagem de usuários'"
       :actions="gridActions"
       :handleBtnNovo="newData"
       :handleBtnAtualizar="loadData"
@@ -27,7 +27,7 @@
     ></Grid>
     <Form
       :open="formModal"
-      title="Formulário de períodos de lançamentos"
+      title="Formulário de usuarios"
       :actClose="() => (formModal = false)"
       :editable="formActionInsertOrEdit"
       :actSave="saveData"
@@ -37,41 +37,73 @@
           <v-col md="1">
             <v-text-field label="id" outlined disabled v-model="formData.id" />
           </v-col>
-          <v-col md="12">
+        </v-row>
+        <v-row>
+          <v-col md="6">
             <v-text-field
-              label="Descrição"
+              label="Nome completo"
               outlined
-              v-model="formData.description"
+              v-model="formData.name"
               autofocus
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
               min="6"
             />
           </v-col>
-          <v-col md="4">
+          <v-col md="6">
             <v-text-field
-              label="Início"
+              label="Email"
               outlined
-              v-model="formData.startDate"
+              v-model="formData.email"
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
-              type="date"
+              type="email"
             />
           </v-col>
 
-          <v-col md="4">
-            <v-text-field
-              label="Término"
+          <v-col md="2">
+            <v-select
+              label="Estado"
               outlined
-              v-model="formData.endDate"
+              :items="selectProfile"
+              v-model="formData.idProfile"
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
-              type="date"
+            />
+          </v-col>
+
+          <v-col md="2">
+            <v-text-field
+              v-if="formActionInsertOrEdit"
+              label="Senha"
+              outlined
+              v-model="formData.password"
+              :disabled="!formActionInsertOrEdit"
+              :rules="rulesRequired"
+              type="password"
+            />
+          </v-col>
+
+          <v-col md="2">
+            <v-text-field
+              v-if="formActionInsertOrEdit"
+              label="Confirma senha"
+              outlined
+              v-model="formData.passwordConfirmation"
+              :disabled="!formActionInsertOrEdit"
+              :rules="rulesRequired"
+              type="password"
             />
           </v-col>
         </v-row>
       </v-form>
     </Form>
+    <ModalMessage
+      :open="dialogStatus"
+      :message="dialogMessage"
+      :close="dialogClose"
+      :type="dialogType"
+    />
   </div>
 </template>
 

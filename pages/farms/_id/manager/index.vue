@@ -72,7 +72,7 @@
                 :headers="hydrometerHeader"
                 :toolbarColor="'cyan accent-4'"
                 :items="hydrometerData"
-                :titulo="'Listagem de hydrometros'"
+                :titulo="'Listagem de hidrometros'"
                 :actions="hydrometerActions"
                 :handleBtnAtualizar="getHydrometer"
                 :handleBtnNovo="hydrometerNew"
@@ -85,7 +85,17 @@
       </v-col>
       <v-col md="8">
         <v-card class="ma-2" outlined>
-          <v-card-title>Nivels de medição</v-card-title>
+          <Grid
+            :headers="levelHeader"
+            :toolbarColor="'cyan accent-4'"
+            :items="levelData"
+            :titulo="'Listagem de niveis'"
+            :actions="levelActions"
+            :handleBtnAtualizar="getLevel"
+            :handleBtnNovo="levelNew"
+            :evento1="levelDel"
+            :loading="levelLoading"
+          ></Grid>
         </v-card>
       </v-col>
     </v-row>

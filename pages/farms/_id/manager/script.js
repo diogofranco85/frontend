@@ -1,11 +1,11 @@
 import { mapGetters } from 'vuex';
 export default {
+  middleware: ['auth'],
   data: () => ({
-
     items: [
       { text: 'Home', to: "/home", nuxt: true },
       { text: 'Clientes', to: "/clients", nuxt: true },
-      { text: 'Fazendas', to: 'farm', nuxt: true },
+      { text: 'Fazendas', to: 'farm', nuxt: true, disabled: true },
       { text: 'Gerenciar', to: "/farms-manager", disabled: true },
     ],
     clientData: {
@@ -43,7 +43,33 @@ export default {
         tooltip: 'excluir Registro',
         color: "red darken-80"
       },
-    ]
+    ],
+
+    levelHeader: [
+      { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
+      { text: 'Periodo', value: 'timeCourse.description', class: 'blue-grey lighten-4' },
+      { text: 'Hidrometro', value: 'hydrometer.identifier', class: 'blue-grey lighten-4' },
+      { text: 'Value1', value: 'valueHydrometer', class: 'blue-grey lighten-4' },
+      { text: 'Value2', value: 'valueHourley', class: 'blue-grey lighten-4' },
+      { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
+    ],
+    levelActions: [
+      {
+        id: 1,
+        icon: 'mdi-close',
+        evento: 1,
+        tooltip: 'excluir Registro',
+        color: "red darken-80"
+      },
+    ],
+
+    levelModal: false,
+    levelForm: {
+      idTimesCourses: '',
+      idHydrometers: '',
+      valueHydrometer: '',
+      valueHourley: '',
+    }
   }),
 
   computed: {
@@ -56,7 +82,12 @@ export default {
       hydrometerData: 'Hydrometer/getData',
       hydrometerLoading: 'Hydrometer/getLoading',
       hydrometerMessage: 'Hydrometer/getMessage',
-      hydrometerError: 'Hydrometer/getError'
+      hydrometerError: 'Hydrometer/getError',
+
+      levelData: 'Level/getData',
+      levelLoading: 'Level/getLoading',
+      levelMessage: 'Level/getMessage',
+      levelError: 'Level/getError'
     })
   },
 
@@ -67,6 +98,7 @@ export default {
       this.latitude = parseFloat(value.latitude);
       this.longitude = parseFloat(value.longitude);
       this.getHydrometer();
+      this.getLevel();
       this.hydrometerForm.idFarm = value.id;
 
       const pathFarm = `/farms/client/${value.id}/list`;
@@ -128,6 +160,10 @@ export default {
       this.$store.dispatch('Hydrometer/GET_LIST', this.getFarm.id);
     },
 
+    getLevel() {
+      this.$store.dispatch('Level/GET_LIST', this.getFarm.id);
+    },
+
     hydrometerNew() {
       this.hydrometerForm.identifier = '';
       this.hydrometerModal = true;
@@ -140,6 +176,20 @@ export default {
 
     hydrometerSave() {
       this.$store.dispatch('Hydrometer/SET_DATA', this.hydrometerForm);
+    },
+
+    levelNew() {
+      this.levelForm.identifier = '';
+      this.levelModal = true;
+    },
+
+    levelDel(params) {
+      this.$store.dispatch('Level/SET_DEL', params.id);
+
+    },
+
+    levelSave() {
+      this.$store.dispatch('Level/SET_DATA', this.levelForm);
     }
   }
 
