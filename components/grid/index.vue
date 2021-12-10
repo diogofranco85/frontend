@@ -48,7 +48,7 @@
                 </v-tooltip>
               </vue-json-to-csv>
 
-              <v-tooltip bottom>
+              <v-tooltip bottom v-if="viewBtnNew !== null">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
@@ -64,7 +64,7 @@
                 <span>Adicionar novo</span>
               </v-tooltip>
 
-              <v-tooltip bottom>
+              <v-tooltip bottom v-if="viewBtnUpdate != null">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="light"

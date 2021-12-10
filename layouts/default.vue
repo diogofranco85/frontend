@@ -101,12 +101,17 @@ export default {
         {
           icon: "mdi-account-multiple",
           title: "Clientes",
-          to: "/clients/index",
+          to: "/clients",
         },
         {
           icon: "mdi-table-check",
           title: "Períodos de lançamento",
           to: "/time_courses/index",
+        },
+        {
+          icon: "mdi-account-circle",
+          title: "Planilha",
+          to: "/sheets",
         },
         {
           icon: "mdi-account-circle",

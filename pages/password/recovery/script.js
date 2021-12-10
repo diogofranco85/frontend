@@ -1,6 +1,10 @@
 import { post, put } from '~/utils/api';
+import ModalMessage from '~/components/ModalMessage';
 export default {
-  layout: 'blank',
+  components: {
+    ModalMessage
+  },
+  layout: 'clear',
   data: () => ({
     stepper: 1,
     email: '',

@@ -2,6 +2,16 @@ import { mapGetters } from 'vuex';
 export default {
   middleware: ['auth'],
   data: () => ({
+    mapType: 'terrain',
+    optionsMaps: {
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      fullscreenControl: true,
+      disableDefaultUI: false
+    },
     items: [
       { text: 'Home', to: "/home", nuxt: true },
       { text: 'Clientes', to: "/clients", nuxt: true },
@@ -49,8 +59,8 @@ export default {
       { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
       { text: 'Periodo', value: 'timeCourse.description', class: 'blue-grey lighten-4' },
       { text: 'Hidrometro', value: 'hydrometer.identifier', class: 'blue-grey lighten-4' },
-      { text: 'Value1', value: 'valueHydrometer', class: 'blue-grey lighten-4' },
-      { text: 'Value2', value: 'valueHourley', class: 'blue-grey lighten-4' },
+      { text: 'Nivél estático', value: 'valueHydrometer', class: 'blue-grey lighten-4' },
+      { text: 'Nivél Dinâmico', value: 'valueHourley', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
     ],
     levelActions: [
@@ -69,7 +79,14 @@ export default {
       idHydrometers: '',
       valueHydrometer: '',
       valueHourley: '',
-    }
+    },
+
+    selectTimecourses: [],
+    selectHydrometer: [],
+
+    dialogStatus: false,
+    dialogMessage: '',
+    dialogType: 'success',
   }),
 
   computed: {
@@ -87,7 +104,9 @@ export default {
       levelData: 'Level/getData',
       levelLoading: 'Level/getLoading',
       levelMessage: 'Level/getMessage',
-      levelError: 'Level/getError'
+      levelError: 'Level/getError',
+
+      timeCourses: 'TimeCourses/getData',
     })
   },
 
@@ -99,6 +118,8 @@ export default {
       this.longitude = parseFloat(value.longitude);
       this.getHydrometer();
       this.getLevel();
+      this.getTimeCourses();
+
       this.hydrometerForm.idFarm = value.id;
 
       const pathFarm = `/farms/client/${value.id}/list`;
@@ -137,11 +158,47 @@ export default {
           this.getHydrometer();
         }
       }
+    },
+
+    hydrometerData(value, oldValue) {
+      if (value !== oldValue) {
+        value.map(item => {
+          this.selectHydrometer.push({
+            value: item.id,
+            text: item.identifier
+          })
+        })
+      }
+    },
+
+    timeCourses(value, oldValue) {
+      if (value !== oldValue) {
+        console.log(value);
+        value.map(item => {
+          this.selectTimecourses.push({
+            value: item.id,
+            text: item.description
+          })
+        })
+      }
+    },
+
+    levelMessage(value, oldValue) {
+      if (value !== '') {
+        if (this.levelError == false) {
+          this.dialogOpen(value, 'success');
+          this.getLevel();
+          this.levelModal = false;
+        } else {
+          this.dialogOpen(value, 'error');
+        }
+      }
     }
   },
 
-  created() {
+  mounted() {
     this.loadData();
+    this.mapType = 'hybrid'
   },
 
   methods: {
@@ -164,6 +221,10 @@ export default {
       this.$store.dispatch('Level/GET_LIST', this.getFarm.id);
     },
 
+    getTimeCourses() {
+      this.$store.dispatch('TimeCourses/GET_LIST');
+    },
+
     hydrometerNew() {
       this.hydrometerForm.identifier = '';
       this.hydrometerModal = true;
@@ -179,7 +240,11 @@ export default {
     },
 
     levelNew() {
-      this.levelForm.identifier = '';
+      this.levelForm.idTimesCourses = '';
+      this.levelForm.idHydrometers = '';
+      this.levelForm.valueHydrometer = '';
+      this.levelForm.valueHourley = '';
+      this.levelForm.id = '';
       this.levelModal = true;
     },
 
@@ -190,6 +255,16 @@ export default {
 
     levelSave() {
       this.$store.dispatch('Level/SET_DATA', this.levelForm);
+    },
+
+    dialogClose() {
+      this.dialogStatus = false;
+    },
+
+    dialogOpen(message, type) {
+      this.dialogMessage = message;
+      this.dialogType = type;
+      this.dialogStatus = true;
     }
   }
 

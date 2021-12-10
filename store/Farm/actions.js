@@ -6,6 +6,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
+
     await get(`/farm/${payload.id}/list`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;

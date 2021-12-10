@@ -15,7 +15,8 @@
     <GmapMap
       :center="{ lng: longitude, lat: latitude }"
       :zoom="15"
-      map-type-id="satellite"
+      :options="optionsMaps"
+      :map-type-id="mapType"
       style="width: 100%; height: 350px; border: solid 1px #eee"
     >
       <GmapMarker
@@ -99,6 +100,61 @@
         </v-card>
       </v-col>
     </v-row>
+    <Form
+      :open="levelModal"
+      title="Cadastro de niveis"
+      :actClose="() => (levelModal = false)"
+      :editable="true"
+      :actSave="levelSave"
+    >
+      <v-row>
+        <v-col md="3">
+          <v-text-field
+            name="valueEstatico"
+            v-model="levelForm.valueHydrometer"
+            label="Nivél estático"
+            outlined
+            type="number"
+          />
+        </v-col>
+
+        <v-col md="3">
+          <v-text-field
+            name="valueDinamic"
+            v-model="levelForm.valueHourley"
+            label="Nivél Dinâmico"
+            type="number"
+            outlined
+          />
+        </v-col>
+        <v-col md="3">
+          <v-select
+            name="timecourses"
+            :items="selectTimecourses"
+            v-model="levelForm.idTimesCourses"
+            type="number"
+            label="Período"
+            outlined
+          />
+        </v-col>
+
+        <v-col md="3">
+          <v-select
+            name="hydrometer"
+            :items="selectHydrometer"
+            v-model="levelForm.idHydrometers"
+            label="Hidrometro"
+            outlined
+          />
+        </v-col>
+      </v-row>
+    </Form>
+    <ModalMessage
+      :open="dialogStatus"
+      :message="dialogMessage"
+      :close="dialogClose"
+      :type="dialogType"
+    />
   </div>
 </template>
 

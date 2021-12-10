@@ -14,13 +14,6 @@
         </v-row>
       </v-card>
     </v-container>
-    <ModalMessage
-      :open="modelMessage"
-      message="ola mundo"
-      :close="closeModal"
-      type="error"
-    />
-    <v-btn @click="abrirModal">Abrir Modal</v-btn>
   </div>
 </template>
 

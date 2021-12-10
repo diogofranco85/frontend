@@ -5,7 +5,7 @@ export default {
 
     commit('setLoading', true);
     commit('setError', false);
-
+    commit('setMessage', '');
     await get('/time/course/list', 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
@@ -22,7 +22,7 @@ export default {
   async GET_ITEM({ commit }, payload) {
     commit('setLoading', true);
     commit('setError', false);
-
+    commit('setMessage', '');
     await get(`/time/course/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
@@ -44,7 +44,7 @@ export default {
       await post('/time/course/create', payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', response.data.message || 'Cliente incluído com sucesso');
+          commit('setMessage', response.data.message);
         })
         .catch((err) => {
           console.log('error');
@@ -56,7 +56,7 @@ export default {
       await put(`/time/course/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', response.data.message || 'Cliente alterado com sucesso');
+          commit('setMessage', response.data.message);
         })
         .catch((err) => {
           commit('setLoading', false);

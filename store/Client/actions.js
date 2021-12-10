@@ -5,6 +5,7 @@ export default {
 
     commit('setLoading', true);
     commit('setError', false);
+    commit('setMessage', '');
 
     await get('/client/list', 'COM_TOKEN_USUARIO')
       .then(response => {
@@ -15,7 +16,7 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
@@ -32,7 +33,7 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
@@ -50,7 +51,7 @@ export default {
           console.log('error');
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', err.response?.data?.message || err);
+          commit('setMessage', err.response.data.message);
         });
     } else {
       await put(`/client/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
@@ -61,7 +62,7 @@ export default {
         .catch((err) => {
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', err.response.data.message || err);
+          commit('setMessage', err.response.data.message);
         })
     }
   }

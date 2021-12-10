@@ -1,11 +1,18 @@
 import { mapGetters } from 'vuex';
+import ModalMessage from '~/components/ModalMessage';
 
 export default {
-  layout: 'blank',
+  components: {
+    ModalMessage
+  },
+  layout(context) {
+    return 'clear'
+  },
   data: () => ({
     formData: {
       email: process.env.NODE_ENV == 'development' ? 'diogo.franco85@gmail.com' : '',
-      password: process.env.NODE_ENV == 'development' ? '150398' : ''
+      password: process.env.NODE_ENV == 'development' ? '150398' : '',
+      flow: 'web'
     },
     valid: true,
     e1: true,
