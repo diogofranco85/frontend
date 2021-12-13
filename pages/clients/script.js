@@ -9,15 +9,16 @@ export default {
     formActionInsertOrEdit: true,
     formAction: 'new',
     formModal: false,
+    selectState: [],
     formData: {
       id: null,
       name: '',
       document: '',
-      address: '',
-      num: '',
+      street: '',
+      number: '',
       district: '',
       city: '',
-      state: '',
+      idState: '',
       phone: ''
     },
     rulesRequired: [
@@ -31,13 +32,12 @@ export default {
       { text: 'Home', to: "home", nuxt: true },
       { text: 'Clientes', to: "clients", disabled: true },
     ],
-    loading: false,
     itemsGrid: [],
     headerGrid: [
       { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
       { text: 'Empresa', value: 'name', class: 'blue-grey lighten-4' },
       { text: 'Cidade', value: 'city', class: 'blue-grey lighten-4' },
-      { text: 'Estado', value: 'state', class: 'blue-grey lighten-4' },
+      { text: 'Estado', value: 'State.value', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
     ],
     gridActions: [
@@ -70,26 +70,37 @@ export default {
     ...mapGetters({
       dataStore: 'Client/getData',
       itemStore: 'Client/getItem',
-      vuexMessage: 'Client/getMessage',
-      vuexError: 'Client/getError'
+      message: 'Client/getMessage',
+      error: 'Client/getError',
+      descriptiveItems: 'DescriptiveItems/getData',
+      loading: 'Client/getLoading'
     })
   },
 
   watch: {
     itemStore(value) {
       if (value !== {}) {
-
         this.formData.id = value.id;
         this.formData.name = value.name;
         this.formData.document = value.document;
-        this.formData.address = value.address;
-        this.formData.num = value.num;
+        this.formData.street = value.street;
+        this.formData.number = value.number;
         this.formData.district = value.district;
-        this.formData.state = value.state;
+        this.formData.idState = value.idState;
         this.formData.city = value.city;
         this.formData.phone = value.phone
         this.formModal = true
-        this.loading = false;
+      }
+    },
+
+    descriptiveItems(value, oldValue) {
+      if (oldValue != []) {
+        value.map(item => {
+          this.selectState.push({
+            text: `${item.name} - ${item.value}`,
+            value: item.id
+          })
+        })
       }
     },
 
@@ -99,9 +110,16 @@ export default {
       }
     },
 
+<<<<<<< HEAD
     vuexMessage(value) {
       if (value !== '') {
         if (this.vuexError === true) {
+=======
+    message(value, oldValue) {
+      console.log('value', { atual: value, antigo: oldValue, error: this.error });
+      if (value !== "") {
+        if (this.error === true) {
+>>>>>>> origin/master
           this.$swal.fire({
             type: 'error',
             title: 'Notificação do sistema - Error',
@@ -113,17 +131,21 @@ export default {
             title: 'Notificação do sistema - Sucesso',
             text: value
           })
+<<<<<<< HEAD
 
           this.formModal = false;
           this.loading = false;
+=======
+          this.formModal = false;
+>>>>>>> origin/master
           this.loadData();
         }
       }
     },
   },
 
-  async mounted() {
-    await this.loadData();
+  mounted() {
+    this.loadData();
   },
 
   methods: {
@@ -132,8 +154,8 @@ export default {
       this.formData.id = null;
       this.formData.name = '';
       this.formData.document = '';
-      this.formData.address = '';
-      this.formData.num = '';
+      this.formData.street = '';
+      this.formData.number = '';
       this.formData.district = '';
       this.formData.state = '';
       this.formData.city = '';
@@ -141,13 +163,12 @@ export default {
     },
 
     loadData() {
-      this.loading = true;
       this.$store.dispatch('Client/GET_LIST');
-      this.loading = false;
     },
 
     newData() {
       this.formActionInsertOrEdit = true;
+      this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-state' });
       this.clearForm();
       this.formModal = true;
     },
@@ -155,8 +176,8 @@ export default {
     editData(params) {
       try {
         this.formAction = 'edit'
+        this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-state' });
         this.formActionInsertOrEdit = true;
-        this.loading = true;
         this.$store.dispatch('Client/GET_ITEM', params.id);
       } catch (err) {
         this.$swal.fire({
@@ -169,28 +190,40 @@ export default {
     },
 
     viewData(params) {
+      this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-state' });
       this.formActionInsertOrEdit = false;
-      this.loading = true;
       this.$store.dispatch('Client/GET_ITEM', params.id);
     },
 
     async saveData() {
-      this.loading = true;
       this.$store.dispatch('Client/SET_DATA', {
         typeOperation: this.formAction,
         data: this.formData
       });
+<<<<<<< HEAD
 
       this.formModal = false;
 
 
+=======
+>>>>>>> origin/master
     },
 
     toFarm(params) {
+      const { id } = params;
+      const url = `/farms/client/${id}/list`;
       this.$router.push({
+<<<<<<< HEAD
         name: 'farms',
         params
       })
+=======
+        path: url,
+        params: {
+          id
+        }
+      });
+>>>>>>> origin/master
     }
   }
 }

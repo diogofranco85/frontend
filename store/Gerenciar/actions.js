@@ -6,7 +6,11 @@ export default {
       commit('setLoading', true);
       commit('setError', false);
 
+<<<<<<< HEAD
       const { data } = await get(`/client/${payload}`, 'COM_TOKEN_USUARIO');
+=======
+      const { data } = await get(`/client/${payload}/find`, 'COM_TOKEN_USUARIO');
+>>>>>>> origin/master
 
       commit('setClient', data.result);
 
@@ -23,7 +27,11 @@ export default {
       commit('setLoading', true);
       commit('setError', false);
 
+<<<<<<< HEAD
       const { data } = await get(`/farm/${payload}`, 'COM_TOKEN_USUARIO');
+=======
+      const { data } = await get(`/farm/${payload}/find`, 'COM_TOKEN_USUARIO');
+>>>>>>> origin/master
 
       commit('setFarm', data.result);
 

@@ -18,6 +18,14 @@ export default {
       type: Array,
       default: [],
     },
+    viewBtnNew: {
+      type: Boolean,
+      default: true
+    },
+    viewBtnUpdate: {
+      type: Boolean,
+      default: true
+    },
     loading: Boolean,
     textoToolTipAcao: String,
     eventoDetalhar: Function,

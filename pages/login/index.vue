@@ -69,7 +69,7 @@
                         Entrar
                       </v-btn>
                       <div class="d-flex align-center justify-center pa-4">
-                        <nuxt-link to="/recovery_password" class="text--darken-3">Recuperar senha</nuxt-link>
+                        <nuxt-link to="/password/recovery" class="text--darken-3">Recuperar senha</nuxt-link>
                       </div>
 
                     </v-form>
@@ -78,6 +78,12 @@
             </v-row>
           </v-col>
       </v-row>
+      <ModalMessage
+        :open="dialogStatus"
+        :message="dialogMessage"
+        :close="dialogClose"
+        :type="dialogType"
+      />
   </v-flex>
 </template>
 

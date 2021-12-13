@@ -5,13 +5,13 @@ export default {
 
     commit('setLoading', true);
     commit('setError', false);
-
+    commit('setMessage', '');
     post('/session', payload, 'SEM_TOKEN_JSON')
       .then(response => {
-        const { data } = response;
+        const { result } = response.data;
         commit('setAuth', true);
-        commit("setToken", data.access_token);
-        commit('setUser', data.user[0]);
+        commit("setToken", result.token);
+        commit('setUser', result.user);
       })
       .catch(err => {
         commit('setError', true);
@@ -20,6 +20,7 @@ export default {
   },
 
   async GET_LOGOUT({ commit }) {
+    commit('setMessage', '');
     commit('setAuth', false);
     commit('setToken', '');
     commit('setUser', []);
@@ -27,7 +28,12 @@ export default {
 
   async SET_MESSAGE_ERROR_LOGIN({ commit }) {
     commit('setError', true);
-    commit('setMessage', 'Usuário desconectado. favor conectar novamente');
+    commit('setMessage', 'Usuário desconectado com sucesso');
+  },
+
+  SET_CLEAR_MESSAGE({ commit }) {
+    commit('setError', false);
+    commit('setMessage', '');
   }
 
 }

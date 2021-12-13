@@ -2,14 +2,24 @@ import { mapGetters } from 'vuex';
 
 export default {
   data: () => ({
+<<<<<<< HEAD
     selectClient: [],
     selectFarm: [],
+=======
+    loading: true,
+>>>>>>> origin/master
   }),
   middleware: ['auth'],
 
   computed: {
     ...mapGetters({
+<<<<<<< HEAD
       client: 'Client/getData'
+=======
+      average: 'Chart/getAverage',
+      hoursDay: 'Chart/getHoursDay',
+      cubicMeterDay: 'Chart/getCubicMeterDay',
+>>>>>>> origin/master
     })
   },
 
@@ -17,6 +27,7 @@ export default {
     this.loadData();
   },
 
+<<<<<<< HEAD
   watch: {
     client(value) {
       if (value !== []) {
@@ -31,5 +42,11 @@ export default {
     loadData() {
       this.$store.dispatch('Client/GET_LIST');
     }
+=======
+  methods: {
+    loadData() {
+      this.$store.dispatch('Chart/GET_SHEETS');
+    },
+>>>>>>> origin/master
   }
 }

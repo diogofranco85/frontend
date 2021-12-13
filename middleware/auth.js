@@ -28,6 +28,10 @@ export default function (props) {
       store.dispatch('Auth/SET_MESSAGE_ERROR_LOGIN')
       redirect('/login');
     }
+
+    if (status === 404) {
+      redirect('/404');
+    }
     return Promise.reject(error);
   })
 

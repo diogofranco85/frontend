@@ -5,8 +5,9 @@ export default {
 
     commit('setLoading', true);
     commit('setError', false);
+    commit('setMessage', '');
 
-    await get('/client', 'COM_TOKEN_USUARIO')
+    await get('/client/list', 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -15,7 +16,7 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
@@ -23,7 +24,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
 
-    await get(`/client/${payload}`, 'COM_TOKEN_USUARIO')
+    await get(`/client/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setItem", result);
@@ -32,34 +33,36 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
   async SET_DATA({ commit }, payload) {
     commit('setLoading', true);
     commit('setError', false);
+    commit('setMessage', '');
     if (payload.typeOperation !== 'edit') {
-      await post('/client', payload.data, 'COM_TOKEN_USUARIO')
-        .then(() => {
+      await post('/client/create', payload.data, 'COM_TOKEN_USUARIO')
+        .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Cliente incluído com sucesso');
+          commit('setMessage', response.data.message || 'Cliente incluído com sucesso');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('error');
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', 'Não foi possivél salvar os dados. Se persistir entre em contato com o suporte. ' + err.response.data.message);
+          commit('setMessage', err.response.data.message);
         });
     } else {
-      await put(`/client/${payload.data.id}`, payload.data, 'COM_TOKEN_USUARIO')
-        .then(() => {
+      await put(`/client/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
+        .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Cliente alterado com sucesso');
+          commit('setMessage', response.data.message || 'Cliente alterado com sucesso');
         })
         .catch((err) => {
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', 'Não foi possivél salvar os dados. Se persistir entre em contato com o suporte. ' + err.response.data.message);
+          commit('setMessage', err.response.data.message);
         })
     }
   }

@@ -1,11 +1,18 @@
 import { mapGetters } from 'vuex';
+import ModalMessage from '~/components/ModalMessage';
 
 export default {
-  layout: 'blank',
+  components: {
+    ModalMessage
+  },
+  layout(context) {
+    return 'clear'
+  },
   data: () => ({
     formData: {
       email: process.env.NODE_ENV == 'development' ? 'diogo.franco85@gmail.com' : '',
-      password: process.env.NODE_ENV == 'development' ? '150398' : ''
+      password: process.env.NODE_ENV == 'development' ? '150398' : '',
+      flow: 'web'
     },
     valid: true,
     e1: true,
@@ -16,7 +23,11 @@ export default {
     emailRules: [
       (v) => !!v || 'Campo E-mail é obrigatório',
       (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Endereço de e-mail não é válido'
-    ]
+    ],
+
+    dialogStatus: false,
+    dialogMessage: '',
+    dialogType: 'error'
   }),
 
   computed: {
@@ -35,24 +46,20 @@ export default {
       }
     },
 
-    error(value) {
-      if (value == true) {
-        this.$swal.fire({
-          type: 'error',
-          title: 'Falha no login',
-          text: this.message
-        })
+    message(value) {
+      if (value !== '') {
+        if (this.error === true) {
+          this.openDialog(value, 'error')
+        } else {
+          this.openDialog(value, 'success');
+        }
       }
     }
   },
 
   mounted() {
     if (this.error === true) {
-      this.$swal.fire({
-        type: 'error',
-        title: 'Falha no login',
-        text: this.message
-      })
+      this.openDialog(this.message, 'error');
     }
   },
 
@@ -68,6 +75,16 @@ export default {
       } else {
         this.loading = false;
       }
+    },
+
+    openDialog(message, type = 'success') {
+      this.dialogMessage = message;
+      this.dialogType = type;
+      this.dialogStatus = true;
+    },
+    dialogClose() {
+      this.$store.dispatch('Auth/SET_CLEAR_MESSAGE');
+      this.dialogStatus = false;
     }
   }
 }
