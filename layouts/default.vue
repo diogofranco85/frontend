@@ -109,7 +109,7 @@ export default {
           to: "/time_courses/index",
         },
         {
-          icon: "mdi-account-circle",
+          icon: "mdi-clipboard-text-outline",
           title: "Planilha",
           to: "/sheets",
         },

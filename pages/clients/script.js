@@ -193,7 +193,12 @@ export default {
     toFarm(params) {
       const { id } = params;
       const url = `/farms/client/${id}/list`;
-      this.$router.push(url);
+      this.$router.push({
+        path: url,
+        params: {
+          id
+        }
+      });
     }
   }
 }

@@ -3,8 +3,8 @@ export default {
   data: () => ({
     loading: false,
     items: [
-      { text: 'Home', to: "home", nuxt: true },
-      { text: 'Planilha', to: "/planilha", disabled: true },
+      { text: 'Home', to: "/home", nuxt: true },
+      { text: 'Planilha', to: "/sheets", disabled: true },
     ],
     formShow: false,
     formData: {
