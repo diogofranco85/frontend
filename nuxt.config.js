@@ -54,10 +54,6 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
     'nuxt-sweetalert2',
-<<<<<<< HEAD
-    '@nuxtjs/proxy',
-=======
->>>>>>> origin/master
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
