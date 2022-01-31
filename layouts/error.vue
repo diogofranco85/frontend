@@ -1,40 +1,48 @@
 <template>
   <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+    <TopBar title="Error encontrado" />
+    <v-container class="ma-4">
+      <v-card outlined class="ma-4">
+        <v-system-bar height="30" window color="cyan accent-4" dark>
+          <h3>Log</h3>
+        </v-system-bar>
+        <div class="ma-4 pa-4">
+          <h1 v-if="error.statusCode === 404">
+            {{ pageNotFound }}
+          </h1>
+          <h1 v-else>
+            {{ otherError }}
+          </h1>
+          <NuxtLink to="/"> Home page </NuxtLink>
+        </div>
+      </v-card>
+    </v-container>
   </v-app>
 </template>
 
 <script>
 export default {
-  layout: 'empty',
+  layout: "empty",
   props: {
     error: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
+      pageNotFound: "404 - Não Localizado",
+      otherError: "Houve um error no sistema",
+    };
   },
-  head () {
+  head() {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
     return {
-      title
-    }
-  }
-}
+      title,
+    };
+  },
+};
 </script>
 
 <style scoped>

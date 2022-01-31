@@ -47,7 +47,6 @@ export default {
           commit('setMessage', 'Nível cadastrado com sucesso');
         })
         .catch((err) => {
-          console.log('error', payload);
           commit('setLoading', false);
           commit('setError', true);
           commit('setMessage', err.response.data.message);

@@ -1,4 +1,4 @@
-import { get, post, put, del } from "~/utils/api";
+import { get, post, del } from "~/utils/api";
 
 export default {
   async GET_LIST({ commit }, payload) {
@@ -58,7 +58,7 @@ export default {
   CLEAR_DATA({ commit }) {
     commit('setMessage', '');
     commit('setError', false);
-    commit('setLoading', true);
+    commit('setLoading', false);
     commit("setData", []);
   }
 

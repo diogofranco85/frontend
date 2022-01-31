@@ -84,7 +84,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col md="8">
+      <v-col md="8" v-if="showLevel">
         <v-card class="ma-2" outlined>
           <Grid
             :headers="levelHeader"

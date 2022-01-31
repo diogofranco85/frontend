@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex';
 import ModalMessage from '~/components/ModalMessage';
+import { swal } from '~/utils/alert';
 
 export default {
   components: {
@@ -46,12 +47,18 @@ export default {
       }
     },
 
+    user(value) {
+      if (value) {
+        this.$store.dispatch('Auth/GET_MENU', { idProfile: value.idProfile });
+      }
+    },
+
     message(value) {
       if (value !== '') {
         if (this.error === true) {
-          this.openDialog(value, 'error')
+          swal(this, value, 'error');
         } else {
-          this.openDialog(value, 'success');
+          swal(this, value, 'success');
         }
       }
     }
@@ -59,7 +66,7 @@ export default {
 
   mounted() {
     if (this.error === true) {
-      this.openDialog(this.message, 'error');
+      swal(this, this.message, 'error');
     }
   },
 
@@ -69,6 +76,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('Auth/GET_AUTHENTICATE', this.formData)
           .then(() => {
+            console.log('profile', this.user);
             this.loading = false;
             this.$router.push('/home');
           });
@@ -76,15 +84,5 @@ export default {
         this.loading = false;
       }
     },
-
-    openDialog(message, type = 'success') {
-      this.dialogMessage = message;
-      this.dialogType = type;
-      this.dialogStatus = true;
-    },
-    dialogClose() {
-      this.$store.dispatch('Auth/SET_CLEAR_MESSAGE');
-      this.dialogStatus = false;
-    }
   }
 }

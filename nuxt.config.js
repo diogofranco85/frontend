@@ -22,7 +22,7 @@ export default {
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap' }
     ]
   },
 
@@ -66,7 +66,17 @@ export default {
       dark: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
+          primary: colors.cyan.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        },
+
+        light: {
+          primary: colors.cyan.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <TopBar title="Página inicial"></TopBar>
+    <TopBar title="Dashboard"></TopBar>
     <v-container>
       <v-card outlined class="pa-3">
-        <TopBar title="Gráficos sobre o cliente"></TopBar>
+        <TopBar title="Gráficos"></TopBar>
         <v-row class="pa-2">
           <v-col md="4">
             <Doughnut

@@ -1,25 +1,29 @@
 export default {
-  getAuth(state){
+  getAuth(state) {
     return state.auth;
   },
 
-  getUser(state){
+  getUser(state) {
     return state.user;
   },
 
-  getLoading(state){
+  getMenu(state) {
+    return state.menu;
+  },
+
+  getLoading(state) {
     return state.loading;
   },
 
-  getError(state){
+  getError(state) {
     return state.error;
   },
 
-  getMessage(state){
+  getMessage(state) {
     return state.message;
   },
 
-  getToken(state){
+  getToken(state) {
     return state.token;
   }
 }

@@ -31,7 +31,12 @@ export default {
         this.account.profile = response.data.result.profileName;
       })
       .catch(err => {
-        console.log(err.response.data);
+        const { message } = err.response.data;
+        this.$swal.fire({
+          title: 'Erro ao processar dados',
+          text: message,
+          type: 'error'
+        })
       })
   }
 

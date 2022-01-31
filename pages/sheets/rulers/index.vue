@@ -13,7 +13,7 @@
       </template>
     </v-breadcrumbs>
     <v-card class="ma-3" outlined>
-      <v-system-bar color="cyan accent-4" dark
+      <v-system-bar color="primary" dark height="40"
         >Dados para lançamento</v-system-bar
       >
       <v-container>
@@ -25,7 +25,9 @@
               label="Cliente"
               name="cliente"
               @change="onChangeClient"
+              flat
               outlined
+              dense
             />
           </v-col>
 
@@ -36,7 +38,9 @@
               label="Fazenda"
               name="fazenda"
               @change="onChangeFarm"
+              flat
               outlined
+              dense
             />
           </v-col>
 
@@ -46,8 +50,10 @@
               v-model="formData.idHydrometer"
               label="Hidrometro"
               name="hidrometro"
-              outlined
               @change="onChangeHydrometer"
+              flat
+              outlined
+              dense
             />
           </v-col>
 
@@ -58,7 +64,9 @@
               label="Período"
               name="periodo"
               @change="onChangeTimeCourses"
+              flat
               outlined
+              dense
             />
           </v-col>
         </v-row>
@@ -69,45 +77,33 @@
             <v-text-field
               name="date"
               v-model="formData.calculationDate"
+              flat
               outlined
-              label="Nível Estático"
+              label="Data de lançamento"
               type="date"
+              dense
             />
           </v-col>
           <v-col md="2">
             <v-text-field
               name="metrosdiario"
               v-model="formData.hydrometerValue"
+              flat
               outlined
-              label="Valor hidrometro"
+              label="Hidrometro"
               type="number"
+              dense
             />
           </v-col>
           <v-col md="2">
             <v-text-field
               name="levelStatic"
               v-model="formData.hourmeterValue"
+              flat
               outlined
-              label="Valor Hora"
+              label="Horimetro"
               type="number"
-            />
-          </v-col>
-          <v-col md="2">
-            <v-text-field
-              name="levelStatic"
-              v-model="formData.levelStatic"
-              outlined
-              label="Nível Estático"
-              disabled
-            />
-          </v-col>
-          <v-col md="2">
-            <v-text-field
-              name="levelStatic"
-              v-model="formData.levelDynamic"
-              outlined
-              label="Nível Dinâmico"
-              disabled
+              dense
             />
           </v-col>
           <v-col md="1">
@@ -117,7 +113,7 @@
                   outlined
                   x-large
                   icon
-                  color="green"
+                  color="primary"
                   v-bind="attrs"
                   v-on="on"
                   @click="newData"
@@ -131,27 +127,15 @@
         </v-row>
       </v-container>
     </v-card>
-    <v-card outlined>
-      <Grid
-        :headers="headerGrid"
-        :toolbarColor="'cyan accent-4'"
-        :items="flowSheets"
-        :titulo="'Listagem de clientes'"
-        :actions="gridActions"
-        :handleBtnNovo="() => {}"
-        :handleBtnAtualizar="getDataFlow"
-        :evento1="delData"
-        :loading="loading"
-        :viewBtnNew="null"
-        :viewBtnUpdate="true"
-      ></Grid>
-    </v-card>
-    <ModalMessage
-      :open="dialogStatus"
-      :message="dialogMessage"
-      :close="dialogClose"
-      :type="dialogType"
-    />
+    <div outlined v-if="flowSheets.length > 0">
+      <Sheet
+        :items="flowSheetData"
+        :deleteAct="delData"
+        :updateAct="getDataFlow"
+        :limitHidrometer="limitHorimeterDay"
+        :limitHour="limitHourDay"
+      />
+    </div>
   </div>
 </template>
 

@@ -14,7 +14,7 @@
     </v-breadcrumbs>
     <v-container class="ma-4">
       <v-row>
-        <v-col md="1">
+        <v-col md="3">
           <v-icon size="128" color="cyan accent-4"> mdi-account-circle </v-icon>
         </v-col>
         <v-col align-self="center">

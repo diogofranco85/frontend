@@ -13,7 +13,7 @@ export default {
       name: '',
       id: '',
       document: '',
-      phone: '',
+      phone1: '',
       city: '',
     },
     formData: {
@@ -23,8 +23,14 @@ export default {
       longitude: '',
       latitude: '',
       email: '',
-      phone: ''
+      phone: '',
+      limitHorimeterDay: '',
+      limitHourDay: '',
+      idTypeMeter: '',
     },
+
+    selectTypeMeter: [],
+
     rulesRequired: [
       (v) => !!v || 'Este campo é obrigatório',
     ],
@@ -79,7 +85,9 @@ export default {
       itemStore: 'Farm/getItem',
       message: 'Farm/getMessage',
       error: 'Farm/getError',
-      loading: 'Farm/getLoading'
+      loading: 'Farm/getLoading',
+
+      descriptiveItems: 'DescriptiveItems/getData',
     })
   },
 
@@ -100,6 +108,9 @@ export default {
         this.formData.latitude = value.latitude;
         this.formData.email = value.email;
         this.formData.phone = value.phone;
+        this.formData.limitHourDay = value.limitHourDay;
+        this.formData.limitHorimeterDay = value.limitHorimeterDay;
+        this.formData.idTypeMeter = value.idTypeMeter;
         this.formModal = true
         this.loading = false;
       }
@@ -108,6 +119,17 @@ export default {
     dataStore(value) {
       if (value !== []) {
         this.datagrid = value;
+      }
+    },
+
+    descriptiveItems(value, oldValue) {
+      if (oldValue != []) {
+        value.map(item => {
+          this.selectTypeMeter.push({
+            text: `${item.value}`,
+            value: item.id
+          })
+        })
       }
     },
 
@@ -136,7 +158,7 @@ export default {
   },
 
   async mounted() {
-    await this.loadData();
+    this.loadData();
 
     var farm = this.$store.state.Farm;
     if (!farm.client.id) {
@@ -154,6 +176,9 @@ export default {
       this.formData.latitude = null;
       this.formData.email = null;
       this.formData.phone = null;
+      this.formData.limitHourDay = null;
+      this.formData.limitHorimeterDay = null;
+      this.formData.idTypeMeter = null;
     },
 
     loadData() {
@@ -162,11 +187,12 @@ export default {
     },
 
     loadDataGrid() {
-      const { id } = this.clientData;
+      const { id } = this.$route.params;
       this.$store.dispatch('Farm/GET_LIST', { id });
     },
 
     newData() {
+      this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-type-meter' });
       this.formActionInsertOrEdit = true;
       this.clearForm();
       this.formModal = true;
@@ -177,6 +203,7 @@ export default {
         this.formAction = 'edit'
         this.formActionInsertOrEdit = true;
         this.loading = true;
+        this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-type-meter' });
         this.$store.dispatch('Farm/GET_ITEM', params.id);
       } catch (err) {
         this.$swal.fire({
@@ -191,6 +218,7 @@ export default {
     viewData(params) {
       this.formActionInsertOrEdit = false;
       this.loading = true;
+      this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-type-meter' });
       this.$store.dispatch('Farm/GET_ITEM', params.id);
     },
 

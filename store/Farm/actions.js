@@ -6,7 +6,6 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-
     await get(`/farm/${payload.id}/list`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
@@ -19,6 +18,26 @@ export default {
         commit('setMessage', err?.response?.data?.message || err?.message);
       });
   },
+
+  async GET_LIST_BY_TYPE({ commit }, payload) {
+
+    commit('setLoading', true);
+    commit('setError', false);
+    commit('setMessage', '');
+    const { id, type } = payload;
+    await get(`/farm/${id}/list/type/${type}`, 'COM_TOKEN_USUARIO')
+      .then(response => {
+        const { result } = response.data;
+        commit("setData", result);
+        commit('setLoading', false);
+      })
+      .catch(err => {
+        commit('setError', true);
+        commit('setLoading', false);
+        commit('setMessage', err?.response?.data?.message || err?.message);
+      });
+  },
+
 
   async GET_ITEM({ commit }, payload) {
     commit('setLoading', true);

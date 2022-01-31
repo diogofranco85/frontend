@@ -81,7 +81,6 @@ export default {
     },
 
     message(value, oldValue) {
-      console.log('value', { atual: value, antigo: oldValue, error: this.error });
       if (value !== "") {
         if (this.error === true) {
           this.$swal.fire({

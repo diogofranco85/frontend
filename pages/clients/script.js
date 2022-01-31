@@ -19,7 +19,8 @@ export default {
       district: '',
       city: '',
       idState: '',
-      phone: ''
+      phone1: '',
+      phone2: '',
     },
     rulesRequired: [
       (v) => !!v || 'Este campo é obrigatório',
@@ -88,7 +89,8 @@ export default {
         this.formData.district = value.district;
         this.formData.idState = value.idState;
         this.formData.city = value.city;
-        this.formData.phone = value.phone
+        this.formData.phone1 = value.phone1
+        this.formData.phone2 = value.phone2
         this.formModal = true
       }
     },
@@ -111,7 +113,6 @@ export default {
     },
 
     message(value, oldValue) {
-      console.log('value', { atual: value, antigo: oldValue, error: this.error });
       if (value !== "") {
         if (this.error === true) {
           this.$swal.fire({
@@ -147,7 +148,8 @@ export default {
       this.formData.district = '';
       this.formData.state = '';
       this.formData.city = '';
-      this.formData.phone = ''
+      this.formData.phone1 = ''
+      this.formData.phone2 = ''
     },
 
     loadData() {
@@ -196,7 +198,7 @@ export default {
       this.$router.push({
         path: url,
         params: {
-          id
+          idFarm: id
         }
       });
     }

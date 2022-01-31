@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex';
 export default {
   middleware: ['auth'],
   data: () => ({
+    showLevel: false,
     mapType: 'terrain',
     optionsMaps: {
       zoomControl: true,
@@ -15,7 +16,7 @@ export default {
     items: [
       { text: 'Home', to: "/home", nuxt: true },
       { text: 'Clientes', to: "/clients", nuxt: true },
-      { text: 'Fazendas', to: 'farm', nuxt: true, disabled: true },
+      { text: 'Fazendas', to: 'farm', nuxt: true },
       { text: 'Gerenciar', to: "/farms-manager", disabled: true },
     ],
     clientData: {
@@ -91,6 +92,8 @@ export default {
 
   computed: {
     ...mapGetters({
+      typeSheet: 'DescriptiveItems/getItem',
+
       getFarm: 'Gerenciar/getFarm',
       message: 'Gerenciar/getMessage',
       error: 'Gerenciar/getError',
@@ -111,6 +114,17 @@ export default {
   },
 
   watch: {
+    typeSheet(value) {
+      if (value) {
+        if (value.id === this.getFarm.idTypeMeter) {
+          this.showLevel = true
+          return;
+        }
+
+        this.showLevel = false;
+        return;
+      }
+    },
 
     getFarm(value) {
       this.farmData = value;
@@ -173,7 +187,6 @@ export default {
 
     timeCourses(value, oldValue) {
       if (value !== oldValue) {
-        console.log(value);
         value.map(item => {
           this.selectTimecourses.push({
             value: item.id,
@@ -193,11 +206,12 @@ export default {
           this.dialogOpen(value, 'error');
         }
       }
-    }
+    },
   },
 
   mounted() {
     this.loadData();
+    this.$store.dispatch('DescriptiveItems/GET_BY_KEY', 'Static');
     this.mapType = 'hybrid'
   },
 

@@ -1,17 +1,17 @@
 
 export default {
   setAverage(state, payload) {
-    console.log('average', payload)
+
     state.average = payload;
   },
 
   setHoursDay(state, payload) {
-    console.log('setHoursDay', payload)
+
     state.hoursDay = payload;
   },
 
   setCubicMeterDay(state, payload) {
-    console.log('setCubicMeterDay', payload)
+
     state.cubicMeterDay = payload;
   },
 

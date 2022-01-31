@@ -48,7 +48,6 @@ export default {
           commit('setMessage', response.data.message || 'Cliente incluído com sucesso');
         })
         .catch((err) => {
-          console.log('error');
           commit('setLoading', false);
           commit('setError', true);
           commit('setMessage', err.response.data.message);

@@ -34,6 +34,25 @@ export default {
     }
   },
 
+  GET_BY_KEY: async ({ commit }, payload) => {
+    try {
+      commit('setLoading', true);
+      commit('setError', false);
+
+      const { data } = await get(`/descriptives/item/key/${payload}`, 'COM_TOKEN_USUARIO');
+
+      commit('setItem', data.result);
+
+      commit('setLoading', false);
+    } catch (err) {
+      commit('setMessage', err.response.data.message);
+      commit('setLoading', false);
+      commit('setError', true)
+    }
+  },
+
+
+
   LIMPAR_MENSAGEM: ({ commit }) => {
     commit('setMessage', '');
     commit('setError', false);

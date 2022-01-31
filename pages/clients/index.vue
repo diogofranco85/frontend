@@ -35,9 +35,15 @@
       <v-form ref="formRef" v-model="formValid" v-on:submit.prevent="saveData">
         <v-row>
           <v-col md="1">
-            <v-text-field label="id" outlined disabled v-model="formData.id" />
+            <v-text-field
+              label="id"
+              outlined
+              disabled
+              v-model="formData.id"
+              dense
+            />
           </v-col>
-          <v-col md="7">
+          <v-col md="11">
             <v-text-field
               label="Empresa"
               outlined
@@ -46,9 +52,12 @@
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
               min="6"
+              dense
             />
           </v-col>
-          <v-col md="2">
+        </v-row>
+        <v-row>
+          <v-col md="4">
             <v-text-field
               label="CNPJ"
               outlined
@@ -57,67 +66,89 @@
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
               min="11"
+              dense
             />
           </v-col>
 
-          <v-col md="2">
+          <v-col md="4">
             <v-text-field
-              label="Telefone"
+              label="Telefone Fixo"
               outlined
               v-mask="'(##)####-####'"
-              v-model="formData.phone"
+              v-model="formData.phone2"
               :disabled="!formActionInsertOrEdit"
               :rules="rulesRequired"
+              dense
+              min="11"
+            />
+          </v-col>
+
+          <v-col md="4">
+            <v-text-field
+              label="Telefone Celular"
+              outlined
+              v-mask="'(##)#####-####'"
+              v-model="formData.phone1"
+              :disabled="!formActionInsertOrEdit"
+              :rules="rulesRequired"
+              dense
               min="11"
             />
           </v-col>
         </v-row>
         <v-row>
-          <v-col md="5">
+          <v-col md="10">
             <v-text-field
               label="Endereço"
               outlined
               v-model="formData.street"
               :disabled="!formActionInsertOrEdit"
+              dense
               :rules="rulesRequiredMin6"
             />
           </v-col>
-          <v-col md="1">
+          <v-col md="2">
             <v-text-field
               label="Número"
               outlined
               v-model="formData.number"
               :disabled="!formActionInsertOrEdit"
+              dense
               :rules="rulesRequired"
             />
           </v-col>
-          <v-col md="2">
+        </v-row>
+        <v-row>
+          <v-col md="4">
             <v-text-field
               label="Bairro"
               outlined
               v-model="formData.district"
               :disabled="!formActionInsertOrEdit"
+              dense
               :rules="rulesRequired"
             />
           </v-col>
 
-          <v-col md="2">
+          <v-col md="4">
             <v-text-field
               label="Cidade"
               outlined
               v-model="formData.city"
               :disabled="!formActionInsertOrEdit"
+              dense
               :rules="rulesRequired"
             />
           </v-col>
 
-          <v-col md="2">
+          <v-col md="4">
             <v-select
               label="Estado"
               outlined
               :items="selectState"
               v-model="formData.idState"
               :disabled="!formActionInsertOrEdit"
+              dense
               :rules="rulesRequired"
             />
           </v-col>

@@ -23,6 +23,7 @@
             outlined
             v-model="clientData.name"
             :disabled="true"
+            dense
           />
         </v-col>
         <v-col md="2">
@@ -31,23 +32,38 @@
             outlined
             v-mask="'##.###.###/####-##'"
             v-model="clientData.document"
+            dense
             :disabled="true"
           />
         </v-col>
         <v-col md="2">
           <v-text-field
-            label="Telefone"
+            label="Telefone Fixo"
             outlined
-            v-mask="'(##) #####-####'"
-            v-model="clientData.phone"
+            v-mask="'(##)#####-####'"
+            v-model="clientData.phone2"
+            dense
             :disabled="true"
           />
         </v-col>
+
+        <v-col md="2">
+          <v-text-field
+            label="Telefone Celular"
+            outlined
+            v-mask="'(##) #####-####'"
+            v-model="clientData.phone1"
+            dense
+            :disabled="true"
+          />
+        </v-col>
+
         <v-col md="2">
           <v-text-field
             label="Cidade"
             outlined
             v-model="clientData.city"
+            dense
             :disabled="true"
           />
         </v-col>
@@ -111,7 +127,39 @@
             />
           </v-col>
 
-          <v-col md="6">
+          <v-col md="2">
+            <v-text-field
+              label="Horimetro/Limite dia"
+              outlined
+              v-model="formData.limitHorimeterDay"
+              :disabled="!formActionInsertOrEdit"
+              :rules="rulesRequired"
+              min="11"
+            />
+          </v-col>
+
+          <v-col md="2">
+            <v-text-field
+              label="Horas/Limite dia"
+              outlined
+              v-model="formData.limitHourDay"
+              :disabled="!formActionInsertOrEdit"
+              :rules="rulesRequired"
+              min="11"
+            />
+          </v-col>
+
+          <v-col md="2">
+            <v-select
+              name="idTypeMeter"
+              v-model="formData.idTypeMeter"
+              outlined
+              :items="selectTypeMeter"
+              label="Tipo de medição"
+            />
+          </v-col>
+
+          <v-col md="4">
             <v-text-field
               label="Email"
               outlined

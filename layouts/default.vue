@@ -16,7 +16,7 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="cyan">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -28,63 +28,77 @@
       :clipped-left="clipped"
       fixed
       app
-      color="cyan accent-4"
-      class="text--white"
+      color="cyan darken-4"
+      dark
+      flat
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on" @click="account">
-            <v-icon dense> mdi-account-circle </v-icon>
-          </v-btn>
-        </template>
-        <span>Meu dados</span>
-      </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
-            @click.stop="$router.push('/logout')"
+            @click.stop="miniVariant = !miniVariant"
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>mdi-login-variant</v-icon>
+            <v-icon
+              >mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon
+            >
           </v-btn>
         </template>
-        <span>Sair do sistema</span>
+        {{ `${miniVariant ? "Expandir Menu" : "Retrair Menu"}` }}
       </v-tooltip>
+      <v-toolbar-title v-text="title" />
+      <v-spacer />
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text v-on="on" v-bind="attrs">
+            <v-icon>mdi-account</v-icon>
+            <span>{{ NomeUsuario }}</span>
+          </v-btn>
+        </template>
+        <v-list flat>
+          <v-list-item router :to="'/users/account'" active-class="border">
+            <v-icon class="mr-2" color="primary">mdi-account-circle</v-icon>
+            <span>Meus dados</span>
+          </v-list-item>
+          <v-list-item router :to="'/logout'">
+            <v-icon class="mr-2" color="primary">mdi-exit-to-app</v-icon>
+            <span>Sair</span>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container fluid class="pa-0">
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app color="blue-grey lighten-1">
-      <span class="text--white"
-        >Hype Tecnologia e Informatica &copy;
+    <v-footer
+      :absolute="!fixed"
+      app
+      color="cyan darken-4"
+      flat
+      dark
+      class="flex align-center justify-center"
+    >
+      <span class="text--white">
+        Desenvolvido por <strong>Hype Tecnologia e Informatica </strong>&copy;
         {{ new Date().getFullYear() }}</span
       >
     </v-footer>
   </v-app>
 </template>
 
+<style>
+.swal-position-absolute {
+  position: absolute;
+}
+</style>
+
 <script>
-//import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -92,33 +106,6 @@ export default {
       clipped: true,
       drawer: true,
       fixed: true,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "Home",
-          to: "/",
-        },
-        {
-          icon: "mdi-account-multiple",
-          title: "Clientes",
-          to: "/clients",
-        },
-        {
-          icon: "mdi-table-check",
-          title: "Períodos de lançamento",
-          to: "/time_courses/index",
-        },
-        {
-          icon: "mdi-clipboard-text-outline",
-          title: "Planilha",
-          to: "/sheets",
-        },
-        {
-          icon: "mdi-account-circle",
-          title: "Usuários",
-          to: "/users/index",
-        },
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
@@ -128,6 +115,12 @@ export default {
 
   mounted() {
     this.localUser();
+  },
+
+  computed: {
+    ...mapGetters({
+      items: "Auth/getMenu",
+    }),
   },
 
   methods: {

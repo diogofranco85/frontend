@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex';
+import { swal, toast } from '~/utils/alert';
 export default {
   data: () => ({
-    loading: false,
     items: [
       { text: 'Home', to: "/home", nuxt: true },
       { text: 'Planilha', to: "/sheets", disabled: true },
@@ -23,17 +23,18 @@ export default {
       levelDynamic: ''
     },
 
+    limitHourDay: 0,
+    limitHorimeterDay: 0,
+
     selectClient: [],
     selectFarm: [],
     selectHydrometer: [],
     selectTimeCourses: [],
 
+    flowSheetData: [],
+
     error: false,
     message: '',
-
-    dialogStatus: false,
-    dialogMessage: '',
-    dialogType: '',
 
     gridActions: [
       {
@@ -61,6 +62,8 @@ export default {
 
   computed: {
     ...mapGetters({
+      typeSheet: 'DescriptiveItems/getItem',
+
       client: 'Client/getData',
       farm: 'Farm/getData',
       hydrometer: 'Hydrometer/getData',
@@ -68,6 +71,7 @@ export default {
 
       level: 'Level/getItem',
 
+      farmItem: 'Farm/getItem',
 
       clientError: 'Client/getError',
       farmError: 'Farm/getError',
@@ -84,10 +88,18 @@ export default {
       flowSheets: 'FlowSheet/getData',
       flowSheetsMessage: 'FlowSheet/getMessage',
       flowSheetsError: 'FlowSheet/getError',
+      loading: 'FlowSheet/getLoading'
     })
   },
 
   watch: {
+    flowSheets(value, oldValue) {
+
+      if (value !== oldValue) {
+        this.flowSheetData = value;
+      }
+    },
+
     client(value) {
       if (value !== []) {
         value.map(item => {
@@ -113,6 +125,7 @@ export default {
     hydrometer(value) {
       if (value !== []) {
         value.map(item => {
+
           this.selectHydrometer.push({
             text: item.identifier,
             value: item.id
@@ -136,6 +149,13 @@ export default {
       if (value !== {}) {
         this.formData.levelStatic = value.valueHydrometer;
         this.formData.levelDynamic = value.valueHourley;
+      }
+    },
+
+    farmItem(value) {
+      if (value !== {}) {
+        this.limitHorimeterDay = value.limitHorimeterDay;
+        this.limitHourDay = value.limitHourDay
       }
     },
 
@@ -170,7 +190,7 @@ export default {
     levelMessage(value) {
       if (value !== '') {
         if (this.levelError === true) {
-          this.dialogOpen(value, 'error');
+          swal(this, value, 'error');
           this.formShow = false;
         }
       }
@@ -179,9 +199,9 @@ export default {
     flowSheetsMessage(value) {
       if (value !== '') {
         if (this.flowSheetsError === true) {
-          this.dialogOpen(value, 'error');
+          swal(this, value, 'error');
         } else {
-          this.dialogOpen(value, 'success');
+          swal(this, value);
           this.getDataFlow();
           this.formData.valueHydrometer = '';
           this.formData.valueHourley = '';
@@ -190,21 +210,20 @@ export default {
     },
 
     message(value) {
-      console.log('value message', value);
       if (value != '') {
         if (this.error == true) {
-          this.dialogOpen(value, 'error');
+          swal(this, value, 'error');
         } else {
-          this.dialogOpen(value, 'success');
+          swal(this, value);
         }
       }
-    }
-
+    },
   },
 
   mounted() {
     this.loadClient();
     this.$store.dispatch('FlowSheet/CLEAR_DATA');
+    this.$store.dispatch('DescriptiveItems/GET_BY_KEY', 'Static');
 
   },
 
@@ -222,7 +241,7 @@ export default {
       this.selectFarm = [];
       this.selectHydrometer = [];
       this.selectTimeCourses = [];
-      this.$store.dispatch('Farm/GET_LIST', { id: this.formData.idClient });
+      this.$store.dispatch('Farm/GET_LIST_BY_TYPE', { id: this.formData.idClient, type: this.typeSheet.id });
     },
 
     onChangeFarm() {
@@ -231,6 +250,8 @@ export default {
       this.selectTimeCourses = [];
       this.formData.idHydrometer = null;
       this.formData.idTimesCourses = null;
+
+      this.$store.dispatch('Farm/GET_ITEM', this.formData.idFarm);
       this.$store.dispatch('Hydrometer/GET_LIST', this.formData.idFarm);
     },
 
@@ -252,16 +273,6 @@ export default {
       this.formShow = true;
     },
 
-    dialogOpen(message, error) {
-      this.dialogMessage = message;
-      this.dialogType = error;
-      this.dialogStatus = true;
-    },
-
-    dialogClose() {
-      this.dialogStatus = false;
-    },
-
     getDataFlow() {
 
       const dataFlow = {
@@ -279,13 +290,21 @@ export default {
     },
 
     delData(params) {
-      this.$store.dispatch('FlowSheet/SET_DEL', params.id);
+      this.$swal.fire({
+        title: 'Excluir dados',
+        text: `Excluir lançamento do dia ${params.calculationDateBR}`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim excluir',
+        cancelButtonText: 'Não, cancelar!',
+      })
+        .then(result => {
+          if (result.value) {
+            this.$store.dispatch('FlowSheet/SET_DEL', params.id);
+            this.getDataFlow();
+          }
+        })
     },
-
-
-
-
-
   }
 
 

@@ -78,12 +78,6 @@
             </v-row>
           </v-col>
       </v-row>
-      <ModalMessage
-        :open="dialogStatus"
-        :message="dialogMessage"
-        :close="dialogClose"
-        :type="dialogType"
-      />
   </v-flex>
 </template>
 

@@ -14,7 +14,7 @@ export default {
       name: '',
       id: '',
       document: '',
-      phone: '',
+      phone1: '',
       city: ''
     },
     formData: {
@@ -204,13 +204,5 @@ export default {
         params
       })
     },
-
-    formatCNPJ() {
-
-      const cnpj = maskCNPJ(clientData.document);
-      console.log('formatar cnpj', cnpj);
-      return '';
-
-    }
   }
 }

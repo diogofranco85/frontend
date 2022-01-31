@@ -31,7 +31,6 @@ export default {
   watch: {
     dados(value, oldValue) {
       if (value !== oldValue) {
-        console.log('watch', [value, oldValue]);
         this.render()
       }
     },
@@ -45,9 +44,7 @@ export default {
       this.cores = []
       this.datasets = []
 
-      console.log('exec', this.dados);
       if (this.dados.length > 0 && this.dados !== undefined) {
-        console.log('map', true);
         this.dados.map((item, index) => {
           this.labels.push(item.descricao)
           this.elements.push(item.total)

@@ -17,15 +17,16 @@
     >
       <template v-slot:top>
         <div v-if="titulo !== ''">
-          <v-toolbar
+          <v-system-bar
             v-if="titulo"
             flat
             dark
             dense
+            height="36"
             :outlined="true"
             :color="toolbarColor"
           >
-            <v-toolbar-title>{{ titulo }}</v-toolbar-title>
+            <strong>{{ titulo }}</strong>
             <div class="btn-download-dados">
               <vue-json-to-csv
                 v-if="exportarExcel === true && items.length > 0"
@@ -35,12 +36,13 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                      color="success"
+                      color="white"
                       class="mr-2"
                       v-bind="attrs"
                       v-on="on"
+                      icon
                     >
-                      <i class="mdi mdi-download" aria-hidden="true"></i>
+                      <v-icon>mdi-download</v-icon>
                       <!--                  EXPORTAR DADOS-->
                     </v-btn>
                   </template>
@@ -51,13 +53,14 @@
               <v-tooltip bottom v-if="viewBtnNew !== null">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    color="primary"
+                    color="white"
                     class="mr-2"
                     @click="handleBtnNovo"
                     v-bind="attrs"
                     v-on="on"
+                    icon
                   >
-                    <i class="mdi mdi-plus" aria-hidden="true"></i>
+                    <v-icon>mdi-plus</v-icon>
                     <!--                  ADICIONAR NOVO-->
                   </v-btn>
                 </template>
@@ -67,27 +70,27 @@
               <v-tooltip bottom v-if="viewBtnUpdate != null">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    color="light"
+                    color="white"
                     class="mr-2"
                     @click="handleBtnAtualizar"
                     v-bind="attrs"
                     v-on="on"
+                    icon
                   >
-                    <v-icon> mdi-refresh </v-icon>
+                    <v-icon>mdi-refresh</v-icon>
                     <!--                  ATUALIZAR-->
                   </v-btn>
                 </template>
                 <span>Atualizar dados</span>
               </v-tooltip>
             </div>
-          </v-toolbar>
+          </v-system-bar>
           <v-divider class="mx-4" inset vertical />
           <v-spacer />
           <v-text-field
             v-model="search"
             label="Pesquisar"
             class="mx-4"
-            outlined
             dense
           ></v-text-field>
         </div>

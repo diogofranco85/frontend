@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Headers from './headers';
+import Headers from '~/utils/headers';
 
 export const api = axios.create({
   baseURL: process.env.BASE_URL

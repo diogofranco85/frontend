@@ -43,7 +43,6 @@ export default {
 
       if (this.dados.length > 0) {
         this.dados.map((item, index) => {
-          console.log('exec', index);
           this.labels.push(item.descricao)
           this.elements.push(item.total)
           this.values.push(item.iditem)
