@@ -28,7 +28,7 @@
       :clipped-left="clipped"
       fixed
       app
-      color="cyan darken-4"
+      color="cyan accent-4"
       dark
       flat
     >
