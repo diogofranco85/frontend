@@ -81,5 +81,5 @@
   </v-flex>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/login/script.js"></script>
 <style scoped="css" src="./styles.css"></style>

@@ -19,4 +19,4 @@
   </div>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/logout/script.js"></script>

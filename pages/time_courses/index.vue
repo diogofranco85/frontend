@@ -75,4 +75,4 @@
   </div>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/time_courses/script.js"></script>

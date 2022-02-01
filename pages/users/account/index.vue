@@ -37,4 +37,4 @@
   </div>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/users/account/script.js"></script>

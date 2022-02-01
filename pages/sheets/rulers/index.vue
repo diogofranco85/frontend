@@ -139,4 +139,4 @@
   </div>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/sheets/rulers/script.js"></script>

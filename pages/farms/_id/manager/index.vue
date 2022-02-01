@@ -158,4 +158,4 @@
   </div>
 </template>
 
-<script src="./script.js"></script>
+<script src="~/services/farms/manager/script.js"></script>

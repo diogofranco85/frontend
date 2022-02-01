@@ -152,4 +152,4 @@
     />
   </div>
 </template>
-<script src="./script.js"></script>
+<script src="~/services/password/script.js"></script>
