@@ -2,5 +2,10 @@
 .login-container-left img{
     min-height: 100vh;
     min-width: 100%;
+}
+
+.backimage{
+  background-image: url('@/assets/bg_login.jpg');
+  background-size: cover;
 
 }
