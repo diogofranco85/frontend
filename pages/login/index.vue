@@ -42,6 +42,7 @@
                   class="mt-4"
                   color="primary"
                   value="log in"
+                  outlined
                   >Conectar</v-btn
                 >
                 <v-btn
@@ -50,6 +51,7 @@
                   block
                   dark
                   class="mt-2"
+                  outlined
                 >
                   Recuperar senha
                 </v-btn>
