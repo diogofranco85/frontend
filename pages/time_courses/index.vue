@@ -32,45 +32,65 @@
       :editable="formActionInsertOrEdit"
       :actSave="saveData"
     >
-      <v-form ref="formRef" v-model="formValid" v-on:submit.prevent="saveData">
-        <v-row>
-          <v-col md="1">
-            <v-text-field label="id" outlined disabled v-model="formData.id" />
-          </v-col>
-          <v-col md="12">
-            <v-text-field
-              label="Descrição"
-              outlined
-              v-model="formData.description"
-              autofocus
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              min="6"
-            />
-          </v-col>
-          <v-col md="4">
-            <v-text-field
-              label="Início"
-              outlined
-              v-model="formData.startDate"
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              type="date"
-            />
-          </v-col>
+      <validation-observer ref="formRef">
+        <v-form v-on:submit.prevent="saveData">
+          <v-row>
+            <v-col md="1">
+              <v-text-field label="id" disabled v-model="formData.id" />
+            </v-col>
+            <v-col md="12">
+              <validation-provider
+                vid="formData.id"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  label="Descrição"
+                  v-model="formData.description"
+                  autofocus
+                  :disabled="!formActionInsertOrEdit"
+                  :rules="rulesRequired"
+                  min="6"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.id"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  label="Início"
+                  v-model="formData.startDate"
+                  :disabled="!formActionInsertOrEdit"
+                  :rules="rulesRequired"
+                  type="date"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
 
-          <v-col md="4">
-            <v-text-field
-              label="Término"
-              outlined
-              v-model="formData.endDate"
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              type="date"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.id"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  label="Término"
+                  v-model="formData.endDate"
+                  :disabled="!formActionInsertOrEdit"
+                  :rules="rulesRequired"
+                  type="date"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+        </v-form>
+      </validation-observer>
     </Form>
   </div>
 </template>

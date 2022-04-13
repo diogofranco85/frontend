@@ -5,7 +5,6 @@ export default {
   data: () => ({
     datagrid: [],
     formRef: null,
-    formValid: null,
     formActionInsertOrEdit: true,
     formAction: 'new',
     formModal: false,
@@ -22,13 +21,6 @@ export default {
       phone1: '',
       phone2: '',
     },
-    rulesRequired: [
-      (v) => !!v || 'Este campo é obrigatório',
-    ],
-    rulesRequiredMin6: [
-      (v) => !!v || 'Este campo é obrigatório',
-      (v) => v.length > 5 || 'Este campo deve conter no minimo 6 caracteres'
-    ],
     items: [
       { text: 'Home', to: "home", nuxt: true },
       { text: 'Clientes', to: "clients", disabled: true },
@@ -141,15 +133,19 @@ export default {
 
     clearForm() {
       this.formData.id = null;
-      this.formData.name = '';
-      this.formData.document = '';
-      this.formData.street = '';
-      this.formData.number = '';
-      this.formData.district = '';
-      this.formData.state = '';
-      this.formData.city = '';
-      this.formData.phone1 = ''
-      this.formData.phone2 = ''
+      this.formData.name = null;
+      this.formData.document = null;
+      this.formData.street = null;
+      this.formData.number = null;
+      this.formData.district = null;
+      this.formData.state = null;
+      this.formData.city = null;
+      this.formData.phone1 = null
+      this.formData.phone2 = null
+
+      if (this.$refs.formRef)
+        this.$refs.formRef.reset();
+
     },
 
     loadData() {
@@ -186,10 +182,22 @@ export default {
     },
 
     async saveData() {
-      this.$store.dispatch('Client/SET_DATA', {
-        typeOperation: this.formAction,
-        data: this.formData
-      });
+      this.$refs.formRef.validate()
+        .then(success => {
+          if (success) {
+            this.$store.dispatch('Client/SET_DATA', {
+              typeOperation: this.formAction,
+              data: this.formData
+            });
+          } else {
+            this.$swal.fire({
+              type: 'error',
+              title: 'Validação de formulário',
+              text: 'É necessário preencher todos os campos destacados em vermelho'
+            })
+          }
+
+        })
     },
 
     toFarm(params) {

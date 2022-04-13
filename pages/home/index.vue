@@ -45,7 +45,7 @@
               color="blue"
               linkText="Acessar"
               :linkAct="actRuler"
-              title="Nível Régua"
+              title="Medição de Vazão Residual"
               urlImage="//images.hypeti.com.br/regua.png"
             >
               Lançamento / Nível régua<br />

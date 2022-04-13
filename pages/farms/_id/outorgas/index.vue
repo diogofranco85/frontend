@@ -6,7 +6,7 @@
         <strong> Carregando ... </strong>
       </p>
     </v-overlay>
-    <TopBar title="Gerenciamento de outorgas" />
+    <TopBar title="Gerenciamento de fazendas" />
     <v-breadcrumbs :items="items">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
@@ -56,19 +56,17 @@
       :headers="headerGrid"
       :toolbarColor="'grey darken-1'"
       :items="datagrid"
-      :titulo="'Listagem de fazendas'"
+      :titulo="'Listagem de Outorgas'"
       :actions="gridActions"
       :handleBtnNovo="newData"
       :handleBtnAtualizar="loadData"
       :evento1="editData"
-      :evento2="toPage"
       :evento3="viewData"
-      :evento4="toOutorgas"
-      :loading="loading"
+      :loading="false"
     ></Grid>
     <Form
       :open="formModal"
-      title="Formulário de outorgas"
+      title="Formulário de fazendas"
       :actClose="() => (formModal = false)"
       :editable="formActionInsertOrEdit"
       :actSave="saveData"
@@ -76,7 +74,7 @@
       <validation-observer ref="formRef">
         <v-form @submit.prevent="saveData">
           <v-row>
-            <v-col md="2">
+            <v-col md="1">
               <v-text-field
                 label="id"
                 outlined
@@ -84,24 +82,22 @@
                 v-model="formData.id"
               />
             </v-col>
-            <v-col md="10">
+            <v-col md="2">
               <validation-provider
-                vid="formData.name"
+                vid="formData.concierge"
                 v-slot="{ errors }"
                 rules="required"
               >
                 <v-text-field
-                  label="Fazenda"
+                  label="Portaria"
                   outlined
-                  v-model="formData.name"
+                  v-model="formData.concierge"
                   autofocus
                   :disabled="!formActionInsertOrEdit"
                   :error-messages="errors"
                 />
               </validation-provider>
             </v-col>
-          </v-row>
-          <v-row>
             <v-col md="3">
               <validation-provider
                 vid="formData.latitude"
@@ -134,16 +130,17 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="6">
+            <v-col md="3">
               <validation-provider
-                vid="formData.responsible"
+                vid="formData.validate"
                 v-slot="{ errors }"
                 rules="required"
               >
                 <v-text-field
-                  label="Responsavél"
+                  label="Validade"
+                  type="date"
                   outlined
-                  v-model="formData.responsible"
+                  v-model="formData.validateDate"
                   :disabled="!formActionInsertOrEdit"
                   :error-messages="errors"
                 />
@@ -153,8 +150,7 @@
         </v-form>
       </validation-observer>
     </Form>
-    <!-- autorgas -->
   </div>
 </template>
 
-<script src="~/services/farms/client/script.js"></script>
+<script src="~/services/farms/outorgas/script.js"></script>

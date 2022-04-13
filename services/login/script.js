@@ -1,15 +1,13 @@
 import { mapGetters } from 'vuex';
-import ModalMessage from '~/components/ModalMessage';
 import { swal } from '~/utils/alert';
 
 export default {
-  components: {
-    ModalMessage
-  },
   layout(context) {
     return 'clear'
   },
   data: () => ({
+    formRef: null,
+    valid: false,
     formData: {
       email: process.env.NODE_ENV == 'development' ? 'diogo.franco85@gmail.com' : '',
       password: process.env.NODE_ENV == 'development' ? '150398' : '',
@@ -26,9 +24,6 @@ export default {
       (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Endereço de e-mail não é válido'
     ],
 
-    dialogStatus: false,
-    dialogMessage: '',
-    dialogType: 'error'
   }),
 
   computed: {
@@ -73,16 +68,17 @@ export default {
   methods: {
     loginRequest() {
       this.loading = true;
-      if (this.$refs.form.validate()) {
-        this.$store.dispatch('Auth/GET_AUTHENTICATE', this.formData)
-          .then(() => {
-            console.log('profile', this.user);
-            this.loading = false;
-            this.$router.push('/home');
-          });
-      } else {
-        this.loading = false;
-      }
+
+      this.$refs.formRef.validate()
+        .then(() => {
+          this.$store.dispatch('Auth/GET_AUTHENTICATE', this.formData)
+            .then(() => {
+              this.loading = false;
+              this.$router.push('/home');
+            });
+        })
+
+      this.loading = false;
     },
   }
 }

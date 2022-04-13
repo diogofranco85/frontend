@@ -1,5 +1,9 @@
 <template>
-  <h3 class="topbar_border_bottom pa-3 grey lighten-2 text--grey">
+  <h3
+    class="topbar_border_bottom pa-3 teal darken-2"
+    style="color: white; font-weight: 400"
+  >
+    <v-icon dark style="mr-2"> mdi-blur </v-icon>
     {{ title }}
   </h3>
 </template>

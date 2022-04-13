@@ -7,7 +7,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - HydroWater',
+    titleTemplate: '%s - HidroWater',
     title: 'Gestão de autorgas',
     htmlAttrs: {
       lang: 'pt-BR'
@@ -36,7 +36,8 @@ export default {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/v-mask', ssr: false },
-    { src: '~/plugins/google-maps', ssr: false }
+    { src: '~/plugins/google-maps', ssr: false },
+    { src: "~/plugins/vee-validate" }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -90,6 +91,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [/^vue2-google-maps($|\/)/]
+    transpile: [
+      /^vue2-google-maps($|\/)/,
+      "vee-validate/dist/rules"
+    ],
+    extend(config, ctx) { }
   }
 }

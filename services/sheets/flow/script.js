@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex';
 import { swal, toast } from '~/utils/alert';
+import moment from 'moment';
 export default {
   data: () => ({
     items: [
@@ -20,7 +21,8 @@ export default {
       hoursDay: '',
       averageCapital: '',
       levelStatic: '',
-      levelDynamic: ''
+      levelDynamic: '',
+      idTypeMeter: ''
     },
 
     limitHourDay: 0,
@@ -28,13 +30,52 @@ export default {
 
     selectClient: [],
     selectFarm: [],
-    selectHydrometer: [],
+    selectTypeMeter: [],
     selectTimeCourses: [],
 
     flowSheetData: [],
 
     error: false,
     message: '',
+
+    fieldsetView: false,
+
+
+    contHidro: 1,
+
+    field: {
+
+      hydro01: {
+        name: '',
+        id: '',
+        hour: '',
+        value: ''
+      },
+      hydro02: {
+        name: '',
+        id: '',
+        hour: '',
+        value: ''
+      },
+      hydro03: {
+        name: '',
+        id: '',
+        hour: '',
+        value: ''
+      },
+      hydro04: {
+        name: '',
+        id: '',
+        hour: '',
+        value: ''
+      },
+      hydro05: {
+        name: '',
+        id: '',
+        hour: '',
+        value: ''
+      },
+    },
 
     gridActions: [
       {
@@ -62,14 +103,12 @@ export default {
 
   computed: {
     ...mapGetters({
-      typeSheet: 'DescriptiveItems/getItem',
+      typeSheet: 'DescriptiveItems/getData',
 
       client: 'Client/getData',
       farm: 'Farm/getData',
       hydrometer: 'Hydrometer/getData',
       timeCourses: 'TimeCourses/getData',
-
-      level: 'Level/getItem',
 
       farmItem: 'Farm/getItem',
 
@@ -93,6 +132,17 @@ export default {
   },
 
   watch: {
+    typeSheet(value, oldValue) {
+      if (value != oldValue) {
+        value.map(item => {
+          this.selectTypeMeter.push({
+            text: item.value,
+            value: item.id
+          })
+        })
+      }
+    },
+
     flowSheets(value, oldValue) {
 
       if (value !== oldValue) {
@@ -221,10 +271,11 @@ export default {
   },
 
   mounted() {
+    const data = ['Ruler', 'Static', 'Curve'];
     this.loadClient();
+    this.$store.dispatch('DescriptiveItems/GET_BY_KEY', data);
     this.$store.dispatch('FlowSheet/CLEAR_DATA');
-    this.$store.dispatch('DescriptiveItems/GET_BY_KEY', 'Static');
-
+    this.$store.dispatch('TimeCourses/GET_LIST');
   },
 
 
@@ -236,41 +287,19 @@ export default {
     onChangeClient() {
       this.formShow = false;
       this.formData.idFarm = null;
-      this.formData.idHydrometer = null;
-      this.formData.idTimesCourses = null;
+      this.fieldsetView = false;
       this.selectFarm = [];
-      this.selectHydrometer = [];
-      this.selectTimeCourses = [];
       this.$store.dispatch('Farm/GET_LIST_BY_TYPE', { id: this.formData.idClient, type: this.typeSheet.id });
     },
 
     onChangeFarm() {
       this.formShow = false;
-      this.selectHydrometer = [];
-      this.selectTimeCourses = [];
-      this.formData.idHydrometer = null;
-      this.formData.idTimesCourses = null;
-
-      this.$store.dispatch('Farm/GET_ITEM', this.formData.idFarm);
-      this.$store.dispatch('Hydrometer/GET_LIST', this.formData.idFarm);
+      this.fieldsetView = true;
+      this.formData.calculationDate = this.formatDate(Date.now());
     },
 
-    onChangeHydrometer() {
-      this.formShow = false;
-      this.selectTimeCourses = [];
-      this.formData.idTimesCourses = null;
-      this.$store.dispatch('TimeCourses/GET_LIST');
-    },
-
-    onChangeTimeCourses() {
-      const data = {
-        idTimesCourses: this.formData.idTimesCourses,
-        idHydrometers: this.formData.idHydrometer
-      };
-
-      this.getDataFlow();
-      this.$store.dispatch('Level/GET_ITEM_DATA', data);
-      this.formShow = true;
+    formatDate(date) {
+      return moment(date).format('YYYY-MM-DD');
     },
 
     getDataFlow() {

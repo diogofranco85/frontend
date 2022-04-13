@@ -98,12 +98,6 @@
         </v-row>
       </v-form>
     </Form>
-    <ModalMessage
-      :open="dialogStatus"
-      :message="dialogMessage"
-      :close="dialogClose"
-      :type="dialogType"
-    />
   </div>
 </template>
 

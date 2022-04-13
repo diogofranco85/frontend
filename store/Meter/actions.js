@@ -1,12 +1,12 @@
 import { get, post, put, del } from "~/utils/api";
 
 export default {
-  async GET_LIST({ commit }, payload) {
+  async GET_DATA({ commit }, payload) {
 
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-    await get(`/level/farm/${payload}/list`, 'COM_TOKEN_USUARIO')
+    await get(`/meter/farm/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -23,7 +23,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-    await get(`/level/${payload}/find`, 'COM_TOKEN_USUARIO')
+    await get(`/meter/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setItem", result);
@@ -41,10 +41,10 @@ export default {
     commit('setError', false);
     commit('setMessage', '');
     if (payload.typeOperation !== 'edit') {
-      await post('/level/create', payload, 'COM_TOKEN_USUARIO')
+      await post('/meter/create', payload, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Nível cadastrado com sucesso');
+          commit('setMessage', 'Horimetro cadastrado com sucesso');
         })
         .catch((err) => {
           commit('setLoading', false);
@@ -52,10 +52,10 @@ export default {
           commit('setMessage', err.response.data.message);
         });
     } else {
-      await put(`/level/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
+      await put(`/meter/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Nível editado com sucesso');
+          commit('setMessage', 'Horimetro editado com sucesso');
         })
         .catch((err) => {
           commit('setLoading', false);
@@ -73,7 +73,7 @@ export default {
       .then(() => {
         commit('setLoading', false);
         commit('setError', false);
-        commit('setMessage', 'Nível excluído com sucesso');
+        commit('setMessage', 'Horimetro excluído com sucesso');
       })
       .catch(err => {
         commit('setLoading', false);
@@ -98,6 +98,6 @@ export default {
         commit('setLoading', false);
         commit('setMessage', err.response.data.message);
       });
-  },
+  }
 
 }

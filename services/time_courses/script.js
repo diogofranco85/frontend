@@ -144,11 +144,24 @@ export default {
       this.$store.dispatch('TimeCourses/GET_ITEM', params.id);
     },
 
-    async saveData() {
-      this.$store.dispatch('TimeCourses/SET_DATA', {
-        typeOperation: this.formAction,
-        data: this.formData
-      });
+    saveData() {
+
+      this.$refs.formRef.validate()
+        .then(() => {
+          this.$store.dispatch('TimeCourses/SET_DATA', {
+            typeOperation: this.formAction,
+            data: this.formData
+          });
+        })
+        .catch(() => {
+          this.$swal.fire({
+            type: 'error',
+            title: 'Notificação do sistema - Error',
+            text: 'Todos os campos devem ser preenchidos'
+          })
+        })
+
+
     },
 
     toFarm(params) {

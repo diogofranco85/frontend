@@ -54,10 +54,6 @@ export default {
         color: "blue darken-40"
       },
     ],
-
-    dialogStatus: false,
-    dialogMessage: '',
-    dialogType: 'success'
   }),
 
   computed: {
@@ -162,14 +158,5 @@ export default {
     toFarm(params) {
       this.$router.push(`/farms/client/${params.id}/list`);
     },
-
-    openDialog(message, type) {
-      this.dialogMessage = message;
-      this.dialogType = type;
-      this.dialogStatus = true;
-    },
-    dialogClose() {
-      this.dialogStatus = false;
-    }
   }
 }

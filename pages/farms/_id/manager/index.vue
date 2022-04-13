@@ -46,115 +46,333 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col md="4">
-        <v-card class="ma-2" outlined>
-          <Form
-            :open="hydrometerModal"
-            title="Cadastro de hidrometro"
-            :actClose="() => (hydrometerModal = false)"
-            :editable="true"
-            :actSave="hydrometerSave"
-          >
-            <v-row>
-              <v-col md="4">
-                <v-text-field
-                  v-model="hydrometerForm.identifier"
-                  label="Identificador"
-                  outlined
-                  required
-                  min="11"
-                />
-              </v-col>
-            </v-row>
-          </Form>
+      <v-col md="12">
+        <v-card elevation="0" class="ma-1" outlined tile>
+          <v-toolbar color="cyan accent-4" dark dense flat>
+            <v-toolbar-title>
+              <span>Dados para medições</span>
+            </v-toolbar-title>
+            <v-spacer />
+            <v-btn
+              outlined
+              dark
+              color="white"
+              class="ma-2"
+              @click="meterModalOpen"
+            >
+              <v-icon color="white darken-3"> mdi-plus</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-spacer></v-spacer>
+
           <v-row>
-            <v-col md="12">
-              <Grid
-                :headers="hydrometerHeader"
-                :toolbarColor="'cyan accent-4'"
-                :items="hydrometerData"
-                :titulo="'Listagem de hidrometros'"
-                :actions="hydrometerActions"
-                :handleBtnAtualizar="getHydrometer"
-                :handleBtnNovo="hydrometerNew"
-                :evento1="hydrometerDel"
-                :loading="hydrometerLoading"
-              ></Grid>
+            <v-col>
+              <v-simple-table class="ma-2" dense fixed-header>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <!-- <th class="text-left">ID</th> -->
+                      <th class="text-left">Tipo de Medição</th>
+                      <th class="text-left">Nº Outorga</th>
+                      <th class="text-left">Nivel estático</th>
+                      <th class="text-left">Nivel dinânico</th>
+                      <th class="text-left">Volume Máximo / Mês</th>
+                      <th class="text-left">Volume Máximo / Dia</th>
+                      <th class="text-left">Horas Maximas / Dia</th>
+                      <th class="text-left">Nível Minimo / Residual</th>
+                      <th class="text-center grey lighten-3">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in meterItems" :key="item.name">
+                      <td>
+                        <strong>{{ item.descriptiveItem.value }}</strong>
+                      </td>
+                      <td>{{ item.outorga.concierge }}</td>
+                      <td>
+                        {{
+                          item.levelStatic != 0
+                            ? item.levelStatic.toFixed(2)
+                            : ""
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          item.levelDynamic != 0
+                            ? item.levelDynamic.toFixed(2)
+                            : ""
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          item.volMaxMouth != 0
+                            ? item.volMaxMouth.toFixed(2)
+                            : ""
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          item.volMaxDay != 0 ? item.volMaxDay.toFixed(2) : ""
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          item.hourMaxDay != 0 ? item.hourMaxDay.toFixed(2) : ""
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          item.levelMinResidualFlow != 0
+                            ? item.levelMinResidualFlow.toFixed(2)
+                            : ""
+                        }}
+                      </td>
+                      <td class="pa-1">
+                        <v-menu offset-y>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              text
+                              v-on="on"
+                              v-bind="attrs"
+                              outlined
+                              small
+                              color="green"
+                              selectable
+                            >
+                              <span>menu</span>
+                            </v-btn>
+                          </template>
+                          <v-list flat>
+                            <v-list-item selectable>
+                              <v-btn
+                                outlined
+                                small
+                                min-width="100%"
+                                color="green"
+                                @click="gridActHidrometro(item.id)"
+                              >
+                                <v-icon class="mr-2" color="green">
+                                  mdi-beaker-plus-outline</v-icon
+                                >
+                                <span>Hidrometro</span>
+                              </v-btn>
+                            </v-list-item>
+                            <v-list-item selectable>
+                              <v-btn
+                                outlined
+                                small
+                                min-width="100%"
+                                color="yellow darken-4"
+                                @click="gridActEdit(item.id)"
+                              >
+                                <v-icon class="mr-2" color="yellow darken-4">
+                                  mdi-pencil-outline</v-icon
+                                >
+                                <span>Editar</span>
+                              </v-btn>
+                            </v-list-item>
+                            <v-list-item selectable>
+                              <v-btn
+                                outlined
+                                small
+                                min-width="100%"
+                                color="red ligthen-2"
+                                @click="gridActDelete(item.id)"
+                              >
+                                <v-icon class="mr-2" color="red ligthen-2">
+                                  mdi-delete</v-icon
+                                >
+                                <span>Excluir</span>
+                              </v-btn>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
-      <v-col md="8" v-if="showLevel">
-        <v-card class="ma-2" outlined>
-          <Grid
-            :headers="levelHeader"
-            :toolbarColor="'cyan accent-4'"
-            :items="levelData"
-            :titulo="'Listagem de niveis'"
-            :actions="levelActions"
-            :handleBtnAtualizar="getLevel"
-            :handleBtnNovo="levelNew"
-            :evento1="levelDel"
-            :loading="levelLoading"
-          ></Grid>
-        </v-card>
-      </v-col>
     </v-row>
     <Form
-      :open="levelModal"
-      title="Cadastro de niveis"
-      :actClose="() => (levelModal = false)"
+      :open="meterModal"
+      title="Dados de medição"
+      :actClose="meterModalClose"
+      :actSave="meterModalSave"
       :editable="true"
-      :actSave="levelSave"
     >
-      <v-row>
-        <v-col md="3">
-          <v-text-field
-            name="valueEstatico"
-            v-model="levelForm.valueHydrometer"
-            label="Nivél estático"
-            outlined
-            type="number"
-          />
-        </v-col>
+      <validation-observer ref="formMeterRef">
+        <v-form @submit.prevent="loginRequest">
+          <v-row>
+            <v-col md="4">
+              <validation-provider
+                vid="meterData.idTypeMeter"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-select
+                  v-model="meterData.idTypeMeter"
+                  name="outorga"
+                  label="Tipo de medição"
+                  type="number"
+                  :items="selectTypeMeter"
+                  placeholder="Entre com o valor"
+                  required
+                  :error-messages="errors"
+                  outlined
+                  dense
+                />
+              </validation-provider>
+            </v-col>
 
-        <v-col md="3">
-          <v-text-field
-            name="valueDinamic"
-            v-model="levelForm.valueHourley"
-            label="Nivél Dinâmico"
-            type="number"
-            outlined
-          />
-        </v-col>
-        <v-col md="3">
-          <v-select
-            name="timecourses"
-            :items="selectTimecourses"
-            v-model="levelForm.idTimesCourses"
-            type="number"
-            label="Período"
-            outlined
-          />
-        </v-col>
+            <v-col md="4">
+              <validation-provider
+                vid="meterData.idOutorga"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-select
+                  v-model="meterData.idOutorga"
+                  name="outorga"
+                  label="N. Ourtoga"
+                  type="number"
+                  :items="selectOutorgas"
+                  placeholder="Entre com o valor"
+                  required
+                  :error-messages="errors"
+                  outlined
+                  dense
+                />
+              </validation-provider>
+            </v-col>
 
-        <v-col md="3">
-          <v-select
-            name="hydrometer"
-            :items="selectHydrometer"
-            v-model="levelForm.idHydrometers"
-            label="Hidrometro"
-            outlined
-          />
-        </v-col>
-      </v-row>
+            <v-col md="2">
+              <validation-provider
+                vid="meterData.levelStatic"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.levelStatic"
+                  name="nivelEstatico"
+                  label="Nível Estático"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+
+            <v-col md="2">
+              <validation-provider
+                vid="meterData.levelDynamic"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.levelDynamic"
+                  name="nivelDinamico"
+                  label="Nível Dinâmico"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col md="3">
+              <validation-provider
+                vid="meterData.volMaxMouth"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.volMaxMouth"
+                  name="volMaxMouth"
+                  label="Volume Máx / Mês"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+
+            <v-col md="3">
+              <validation-provider
+                vid="meterData.volMaxDay"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.volMaxDay"
+                  name="volMaxDay"
+                  label="Volume Máx / Dia"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+
+            <v-col md="3">
+              <validation-provider
+                vid="meterData.hourMaxDay"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.hourMaxDay"
+                  name="hourMaxDay"
+                  label="Horas Máx. / Dia"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+
+            <v-col md="3">
+              <validation-provider
+                vid="meterData.levelMinResidualFlow"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="meterData.levelMinResidualFlow"
+                  name="levelMinResidualFlow"
+                  label="Nível Min. Residual"
+                  type="number"
+                  placeholder="Entre com o valor"
+                  required
+                  outlined
+                  dense
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+        </v-form>
+      </validation-observer>
     </Form>
-    <ModalMessage
-      :open="dialogStatus"
-      :message="dialogMessage"
-      :close="dialogClose"
-      :type="dialogType"
-    />
   </div>
 </template>
 

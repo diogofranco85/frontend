@@ -32,8 +32,8 @@
       dark
       flat
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-tooltip bottom>
+      <v-app-bar-nav-icon @click.stop="miniVariant = !miniVariant" />
+      <!-- <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -41,13 +41,11 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon
-              >mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon
-            >
+            <v-icon>mdi-apps</v-icon>
           </v-btn>
         </template>
         {{ `${miniVariant ? "Expandir Menu" : "Retrair Menu"}` }}
-      </v-tooltip>
+      </v-tooltip> -->
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-menu offset-y>
@@ -109,7 +107,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "HydroWater",
+      title: "HidroWater",
     };
   },
 

@@ -1,4 +1,4 @@
-import { get } from "~/utils/api";
+import { get, post } from "~/utils/api";
 
 export default {
   GET_DATA: async ({ commit }, payload) => {
@@ -17,29 +17,33 @@ export default {
     }
   },
 
-  GET_FARM: async ({ commit }, payload) => {
-    try {
-      commit('setLoading', true);
-      commit('setError', false);
-
-      const { data } = await get(`/farm/${payload}`, 'COM_TOKEN_USUARIO');
-
-      commit('setFarm', data.result);
-
-      commit('setLoading', false);
-    } catch (err) {
-      commit('setMessage', err.response.data.message);
-      commit('setLoading', false);
-      commit('setError', true)
-    }
-  },
-
   GET_BY_KEY: async ({ commit }, payload) => {
     try {
       commit('setLoading', true);
       commit('setError', false);
 
-      const { data } = await get(`/descriptives/item/key/${payload}`, 'COM_TOKEN_USUARIO');
+      const sendData = {
+        name: payload
+      }
+
+      const { data } = await post(`/descriptives/item/key`, sendData, 'COM_TOKEN_USUARIO');
+      commit('setData', data.result);
+
+      commit('setLoading', false);
+    } catch (err) {
+      console.log(err);
+      commit('setMessage', err?.response?.data?.message);
+      commit('setLoading', false);
+      commit('setError', true)
+    }
+  },
+
+  GET_ITEM: async ({ commit }, payload) => {
+    try {
+      commit('setLoading', true);
+      commit('setError', false);
+
+      const { data } = await get(`/descriptives/items/${payload}/find`, 'COM_TOKEN_USUARIO');
 
       commit('setItem', data.result);
 

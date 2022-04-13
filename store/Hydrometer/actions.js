@@ -43,7 +43,7 @@ export default {
     await post('/hydrometer/create', payload, 'COM_TOKEN_USUARIO')
       .then((response) => {
         commit('setLoading', false);
-        commit('setMessage', response.data.message || 'Cliente incluído com sucesso');
+        commit('setMessage', response.data.message || 'Hidrometro incluído com sucesso');
       })
       .catch((err) => {
         commit('setLoading', false);

@@ -1,7 +1,8 @@
 <template>
   <v-row justify="center">
-    <v-dialog width="70%" v-model="open">
-      <v-system-bar height="30" window color="cyan accent-4" dark>
+    <v-dialog width="70%" v-model="open" eager persistent>
+      <v-system-bar height="50" window color="cyan accent-4" dark>
+        <v-icon>mdi-file-document-edit</v-icon>
         <h3>HydroWater</h3>
         <v-spacer />
         <v-tooltip bottom>

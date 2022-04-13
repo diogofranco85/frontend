@@ -32,128 +32,180 @@
       :editable="formActionInsertOrEdit"
       :actSave="saveData"
     >
-      <v-form ref="formRef" v-model="formValid" v-on:submit.prevent="saveData">
-        <v-row>
-          <v-col md="1">
-            <v-text-field
-              label="id"
-              outlined
-              disabled
-              v-model="formData.id"
-              dense
-            />
-          </v-col>
-          <v-col md="11">
-            <v-text-field
-              label="Empresa"
-              outlined
-              v-model="formData.name"
-              autofocus
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              min="6"
-              dense
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="4">
-            <v-text-field
-              label="CNPJ"
-              outlined
-              v-mask="'##.###.###/####-##'"
-              v-model="formData.document"
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              min="11"
-              dense
-            />
-          </v-col>
+      <validation-observer ref="formRef">
+        <v-form @submit.prevent="saveData">
+          <v-row>
+            <v-col md="1">
+              <v-text-field
+                label="id"
+                outlined
+                disabled
+                v-model="formData.id"
+                dense
+              />
+            </v-col>
+            <v-col md="11">
+              <validation-provider
+                vid="formData.name"
+                v-slot="{ errors }"
+                rules="required"
+              >
+                <v-text-field
+                  label="Empresa"
+                  outlined
+                  v-model="formData.name"
+                  autofocus
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.document"
+                v-slot="{ errors }"
+                :rules="{ required: true, min: 11 }"
+              >
+                <v-text-field
+                  label="CNPJ"
+                  outlined
+                  v-mask="'##.###.###/####-##'"
+                  v-model="formData.document"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
 
-          <v-col md="4">
-            <v-text-field
-              label="Telefone Fixo"
-              outlined
-              v-mask="'(##)####-####'"
-              v-model="formData.phone2"
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              dense
-              min="11"
-            />
-          </v-col>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.phone2"
+                :rules="{ required: true, min: 10 }"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  label="Telefone Fixo"
+                  outlined
+                  v-mask="'(##)####-####'"
+                  v-model="formData.phone2"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
 
-          <v-col md="4">
-            <v-text-field
-              label="Telefone Celular"
-              outlined
-              v-mask="'(##)#####-####'"
-              v-model="formData.phone1"
-              :disabled="!formActionInsertOrEdit"
-              :rules="rulesRequired"
-              dense
-              min="11"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="10">
-            <v-text-field
-              label="Endereço"
-              outlined
-              v-model="formData.street"
-              :disabled="!formActionInsertOrEdit"
-              dense
-              :rules="rulesRequiredMin6"
-            />
-          </v-col>
-          <v-col md="2">
-            <v-text-field
-              label="Número"
-              outlined
-              v-model="formData.number"
-              :disabled="!formActionInsertOrEdit"
-              dense
-              :rules="rulesRequired"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="4">
-            <v-text-field
-              label="Bairro"
-              outlined
-              v-model="formData.district"
-              :disabled="!formActionInsertOrEdit"
-              dense
-              :rules="rulesRequired"
-            />
-          </v-col>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.phone1"
+                v-slot="{ errors }"
+                :rules="{ required: true, min: 10 }"
+              >
+                <v-text-field
+                  label="Telefone Celular"
+                  outlined
+                  v-mask="'(##)#####-####'"
+                  v-model="formData.phone1"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col md="10">
+              <validation-provider
+                vid="formData.street"
+                v-slot="{ errors }"
+                :rules="{ required: true, min: 10 }"
+              >
+                <v-text-field
+                  label="Endereço"
+                  outlined
+                  v-model="formData.street"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+            <v-col md="2">
+              <validation-provider
+                vid="formData.number"
+                v-slot="{ errors }"
+                rules="required"
+              >
+                <v-text-field
+                  label="Número"
+                  outlined
+                  v-model="formData.number"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.district"
+                v-slot="{ errors }"
+                rules="required"
+              >
+                <v-text-field
+                  label="Bairro"
+                  outlined
+                  v-model="formData.district"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
 
-          <v-col md="4">
-            <v-text-field
-              label="Cidade"
-              outlined
-              v-model="formData.city"
-              :disabled="!formActionInsertOrEdit"
-              dense
-              :rules="rulesRequired"
-            />
-          </v-col>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.city"
+                v-slot="{ errors }"
+                rules="required"
+              >
+                <v-text-field
+                  label="Cidade"
+                  outlined
+                  v-model="formData.city"
+                  dense
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
 
-          <v-col md="4">
-            <v-select
-              label="Estado"
-              outlined
-              :items="selectState"
-              v-model="formData.idState"
-              :disabled="!formActionInsertOrEdit"
-              dense
-              :rules="rulesRequired"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
+            <v-col md="4">
+              <validation-provider
+                vid="formData.idState"
+                v-slot="{ errors }"
+                rules="required"
+              >
+                <v-select
+                  label="Estado"
+                  outlined
+                  v-model="formData.idState"
+                  dense
+                  :items="selectState"
+                  :disabled="!formActionInsertOrEdit"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+        </v-form>
+      </validation-observer>
     </Form>
   </div>
 </template>

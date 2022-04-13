@@ -17,21 +17,9 @@
         Dados do cliente
       </h3>
       <v-row class="ma-2">
-        <v-col md="4">
-          <v-text-field
-            label="Empresa"
-            outlined
-            v-model="clientData.name"
-            :disabled="true"
-          />
-        </v-col>
+        <v-col md="4"> <strong>Cliente: </strong> {{ clientData.name }} </v-col>
         <v-col md="2">
-          <v-text-field
-            label="CNPJ"
-            outlined
-            v-mask="'##.###.###/####-##'"
-            v-model="clientData.document"
-            :disabled="true"
+          <div><strong>Cliente: </strong> {{ clientData.document }}</div>
           />
         </v-col>
         <v-col md="2">
@@ -76,13 +64,7 @@
       <v-form ref="formRef" v-model="formValid" v-on:submit.prevent="saveData">
         <v-row>
           <v-col md="1">
-            <v-text-field
-              label="id"
-              outlined
-              disabled
-              v-model="formData.id"
-              disabled
-            />
+            <v-text-field label="id" outlined disabled v-model="formData.id" />
           </v-col>
           <v-col md="7">
             <v-text-field
