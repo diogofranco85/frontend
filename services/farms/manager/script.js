@@ -13,37 +13,22 @@ export default {
       fullscreenControl: true,
       disableDefaultUI: false
     },
+
+    formAction: 'new',
+
     items: [
       { text: 'Home', to: "/home", nuxt: true },
       { text: 'Clientes', to: "/clients", nuxt: true },
       { text: 'Fazendas', to: 'farm', nuxt: true },
       { text: 'Gerenciar', to: "/farms-manager", disabled: true },
     ],
-    clientData: {
-      id: '',
-      name: '',
-      document: ''
-    },
-
-    farmData: {
-      id: '',
-      farm: '',
-      longitude: '',
-      latitude: '',
-    },
-
-    hydrometerForm: {
-      identifier: '',
-      idFarm: ''
-    },
-
-    hydrometerModal: false,
 
     latitude: 0,
     longitude: 0,
     hydrometerHeader: [
       { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
       { text: 'Identificador', value: 'identifier', class: 'blue-grey lighten-4' },
+      { text: 'TAG', value: 'tag', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
     ],
     hydrometerActions: [
@@ -56,73 +41,92 @@ export default {
       },
     ],
 
-    levelHeader: [
-      { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
-      { text: 'Periodo', value: 'timeCourse.description', class: 'blue-grey lighten-4' },
-      { text: 'Hidrometro', value: 'hydrometer.identifier', class: 'blue-grey lighten-4' },
-      { text: 'Nivél estático', value: 'valueHydrometer', class: 'blue-grey lighten-4' },
-      { text: 'Nivél Dinâmico', value: 'valueHourley', class: 'blue-grey lighten-4' },
-      { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
-    ],
-    levelActions: [
-      {
-        id: 1,
-        icon: 'mdi-close',
-        evento: 1,
-        tooltip: 'excluir Registro',
-        color: "red darken-80"
-      },
-    ],
+    formMeterRef: null,
 
-    levelModal: false,
-    levelForm: {
-      idTimesCourses: '',
-      idHydrometers: '',
+    meterModal: false,
+    meterData: {
+      id: '',
+      idFarm: '',
+      idTypeMeter: '',
+      idOutorga: '',
+      levelStatic: '',
+      levelDynamic: '',
       valueHydrometer: '',
       valueHourley: '',
+      volMaxMouth: '',
+      volMaxDay: '',
+      hourMaxDay: '',
+      levelMinResidualFlow: '',
     },
 
-    selectTimecourses: [],
-    selectHydrometer: [],
+    farmData: {
+      name: '',
+      latitude: '',
+      longitude: '',
+    },
 
-    dialogStatus: false,
-    dialogMessage: '',
-    dialogType: 'success',
+    selectOutorgas: [],
+    selectTypeMeter: [],
+
+    formHydrometerEditable: false
   }),
 
   computed: {
     ...mapGetters({
-      typeSheet: 'DescriptiveItems/getItem',
-
       getFarm: 'Gerenciar/getFarm',
       message: 'Gerenciar/getMessage',
       error: 'Gerenciar/getError',
       loading: 'Gerenciar/getLoading',
 
-      hydrometerData: 'Hydrometer/getData',
-      hydrometerLoading: 'Hydrometer/getLoading',
-      hydrometerMessage: 'Hydrometer/getMessage',
-      hydrometerError: 'Hydrometer/getError',
+      meterItems: 'Meter/getData',
+      meterMessage: 'DescriptiveItems/getMessage',
+      meterError: 'DescriptiveItems/getErrors',
 
-      levelData: 'Level/getData',
-      levelLoading: 'Level/getLoading',
-      levelMessage: 'Level/getMessage',
-      levelError: 'Level/getError',
 
-      timeCourses: 'TimeCourses/getData',
+      typeMeter: 'DescriptiveItems/getData',
+
+
+
+      outorgas: 'Outorgas/getData'
     })
   },
 
   watch: {
-    typeSheet(value) {
-      if (value) {
-        if (value.id === this.getFarm.idTypeMeter) {
-          this.showLevel = true
-          return;
-        }
 
-        this.showLevel = false;
-        return;
+    outorgas(value, oldValue) {
+      if (value !== oldValue) {
+        value.map(item => {
+          this.selectOutorgas.push({
+            value: item.id,
+            text: item.concierge
+          })
+        });
+      }
+    },
+
+    typeMeter(value, oldValue) {
+      if (value !== oldValue) {
+        value.map(item => {
+          this.selectTypeMeter.push({
+            value: item.id,
+            text: item.value
+          })
+        });
+      }
+    },
+
+    MeterItem(value, oldValue) {
+      if (value !== oldValue) {
+        this.meterForm.id = value.id;
+        this.meterForm.idTypeMeter = value.idTypeMeter;
+        this.meterForm.idOutorga = value.idOutorga;
+        this.meterForm.valueHydrometer = value.valueHydrometer;
+        this.meterForm.valueHourley = value.valueHourley;
+        this.meterForm.volMaxMounth = value.volMaxMounth;
+        this.meterForm.volMaxDay = value.volMaxDay;
+        this.meterForm.hourMaxDay = value.hourMaxDay;
+        this.meterForm.levelMinResidualFlow = value.levelMinResidualFlow;
+        this.meterModal = true;
       }
     },
 
@@ -130,11 +134,8 @@ export default {
       this.farmData = value;
       this.latitude = parseFloat(value.latitude);
       this.longitude = parseFloat(value.longitude);
-      this.getHydrometer();
-      this.getLevel();
-      this.getTimeCourses();
 
-      this.hydrometerForm.idFarm = value.id;
+      this.meterData.idFarm = value.id;
 
       const pathFarm = `/farms/client/${value.id}/list`;
 
@@ -152,133 +153,120 @@ export default {
         }
       }
     },
-
-    hydrometerMessage(value) {
-      if (value != '') {
-        if (this.hydrometerError == true) {
-          this.$swal.fire({
-            title: 'Error ao executar ação',
-            text: value,
-            type: 'error'
-          })
-        } else {
-          this.$swal.fire({
-            title: 'Operação realizada com sucesso',
-            text: value,
-            type: 'success'
-          })
-
-          this.hydrometerModal = false;
-          this.getHydrometer();
-        }
-      }
-    },
-
-    hydrometerData(value, oldValue) {
-      if (value !== oldValue) {
-        value.map(item => {
-          this.selectHydrometer.push({
-            value: item.id,
-            text: item.identifier
-          })
-        })
-      }
-    },
-
-    timeCourses(value, oldValue) {
-      if (value !== oldValue) {
-        value.map(item => {
-          this.selectTimecourses.push({
-            value: item.id,
-            text: item.description
-          })
-        })
-      }
-    },
-
-    levelMessage(value, oldValue) {
-      if (value !== '') {
-        if (this.levelError == false) {
-          this.dialogOpen(value, 'success');
-          this.getLevel();
-          this.levelModal = false;
-        } else {
-          this.dialogOpen(value, 'error');
-        }
-      }
-    },
   },
 
   mounted() {
     this.loadData();
-    this.$store.dispatch('DescriptiveItems/GET_BY_KEY', 'Static');
     this.mapType = 'hybrid'
   },
 
   methods: {
-    async loadData() {
+    loadData() {
+      this.loadMeter();
+      this.loadFarm();
+    },
+
+    loadFarm() {
+      const params = this.$route.params;
+      if (!params.id) {
+        this.$router.push('/clients');
+      }
+
+      this.meterData.idFarm = params.id;
+
+      this.$store.dispatch('Gerenciar/GET_FARM', params.id);
+    },
+
+    loadMeter() {
+      const params = this.$route.params;
+      if (!params.id) {
+        this.$router.push('/clients');
+      }
+
+      this.$store.dispatch('Meter/GET_DATA', params.id);
+    },
+
+    loadOutorgas() {
       const params = this.$route.params;
 
       if (!params.id) {
         this.$router.push('/clients');
       }
 
-      this.$store.dispatch('Gerenciar/GET_FARM', params.id);
-
+      this.$store.dispatch('Outorgas/GET_FARM', params.id);
     },
 
-    getHydrometer() {
-      this.$store.dispatch('Hydrometer/GET_LIST', this.getFarm.id);
+    loadTypeMeter() {
+      this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-type-meter' });
     },
 
-    getLevel() {
-      this.$store.dispatch('Level/GET_LIST', this.getFarm.id);
+    clearMeterInput() {
+      this.meterData.id = '';
+      this.meterData.levelStatic = '';
+      this.meterData.levelDynamic = '';
+      this.meterData.idTypeMeter = '';
+      this.meterData.idOutorga = '';
+      this.meterData.valueHydrometer = 0;
+      this.meterData.valueHourley = 0;
+      this.meterData.volMaxMouth = 0;
+      this.meterData.volMaxDay = 0;
+      this.meterData.hourMaxDay = 0;
+      this.meterData.levelMinResidualFlow = 0;
+
+      if (this.$refs.formMeterRef)
+        this.$refs.formMeterRef.reset();
     },
 
-    getTimeCourses() {
-      this.$store.dispatch('TimeCourses/GET_LIST');
+    selectMeter() {
+      this.$store.dispatch('DescriptiveItems/GET_ITEM', this.meterForm.idTypeMeter);
     },
 
-    hydrometerNew() {
-      this.hydrometerForm.identifier = '';
-      this.hydrometerModal = true;
+
+
+    meterModalOpen() {
+      this.clearMeterInput()
+      this.loadOutorgas();
+      this.loadTypeMeter();
+      this.meterModal = true;
     },
 
-    hydrometerDel(params) {
-      this.$store.dispatch('Hydrometer/SET_DEL', params.id);
-
+    meterModalClose() {
+      this.meterModal = false;
     },
 
-    hydrometerSave() {
-      this.$store.dispatch('Hydrometer/SET_DATA', this.hydrometerForm);
+    meterModalSave() {
+      this.$refs.formMeterRef.validate()
+        .then(success => {
+          if (success) {
+            this.$store.dispatch('Meter/SET_DATA', {
+              typeOperation: this.formAction,
+              data: this.meterData
+            });
+          } else {
+            this.$swal.fire({
+              type: 'error',
+              title: 'Validação de formulário',
+              text: 'É necessário preencher todos os campos destacados em vermelho'
+            })
+          }
+
+        })
     },
 
-    levelNew() {
-      this.levelForm.idTimesCourses = '';
-      this.levelForm.idHydrometers = '';
-      this.levelForm.valueHydrometer = '';
-      this.levelForm.valueHourley = '';
-      this.levelForm.id = '';
-      this.levelModal = true;
+    gridActHidrometro(id) {
+      alert('hidro' + id);
     },
 
-    levelDel(params) {
-      this.$store.dispatch('Level/SET_DEL', params.id);
-
+    gridActNew() {
+      alert('hidro novo');
     },
 
-    levelSave() {
-      this.$store.dispatch('Level/SET_DATA', this.levelForm);
+    gridActEdit(id) {
+      alert('edit' + id);
     },
 
-    dialogClose() {
-      this.dialogStatus = false;
-    },
-
-    dialogOpen(message, type) {
-      this.dialogMessage = message;
-      this.dialogType = type;
-      this.dialogStatus = true;
+    gridActDelete(id) {
+      alert('del' + id);
     }
   }
 
