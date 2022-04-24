@@ -1,4 +1,4 @@
-import { get } from "~/utils/api";
+import { get, post, put } from "~/utils/api";
 
 export default {
   GET_DATA: async ({ commit }, payload) => {

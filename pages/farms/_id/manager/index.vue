@@ -71,7 +71,6 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <!-- <th class="text-left">ID</th> -->
                       <th class="text-left">Tipo de Medição</th>
                       <th class="text-left">Nº Outorga</th>
                       <th class="text-left">Nivel estático</th>
@@ -86,44 +85,28 @@
                   <tbody>
                     <tr v-for="item in meterItems" :key="item.name">
                       <td>
-                        <strong>{{ item.descriptiveItem.value }}</strong>
+                        <strong>{{ item.DescriptiveItem.value }}</strong>
                       </td>
-                      <td>{{ item.outorga.concierge }}</td>
+                      <td>{{ item.Outorga.concierge }}</td>
                       <td>
-                        {{
-                          item.levelStatic != 0
-                            ? item.levelStatic.toFixed(2)
-                            : ""
-                        }}
+                        {{ item.levelStatic != 0 ? item.levelStatic : "" }}
                       </td>
                       <td>
-                        {{
-                          item.levelDynamic != 0
-                            ? item.levelDynamic.toFixed(2)
-                            : ""
-                        }}
+                        {{ item.levelDynamic != 0 ? item.levelDynamic : "" }}
                       </td>
                       <td>
-                        {{
-                          item.volMaxMouth != 0
-                            ? item.volMaxMouth.toFixed(2)
-                            : ""
-                        }}
+                        {{ item.volMaxMouth != 0 ? item.volMaxMouth : "" }}
                       </td>
                       <td>
-                        {{
-                          item.volMaxDay != 0 ? item.volMaxDay.toFixed(2) : ""
-                        }}
+                        {{ item.volMaxDay != 0 ? item.volMaxDay : "" }}
                       </td>
                       <td>
-                        {{
-                          item.hourMaxDay != 0 ? item.hourMaxDay.toFixed(2) : ""
-                        }}
+                        {{ item.hourMaxDay != 0 ? item.hourMaxDay : "" }}
                       </td>
                       <td>
                         {{
                           item.levelMinResidualFlow != 0
-                            ? item.levelMinResidualFlow.toFixed(2)
+                            ? item.levelMinResidualFlow
                             : ""
                         }}
                       </td>
@@ -149,7 +132,7 @@
                                 small
                                 min-width="100%"
                                 color="green"
-                                @click="gridActHidrometro(item.id)"
+                                @click="openModalHydrometer(item.id)"
                               >
                                 <v-icon class="mr-2" color="green">
                                   mdi-beaker-plus-outline</v-icon
@@ -224,6 +207,7 @@
                   :error-messages="errors"
                   outlined
                   dense
+                  @change="changeTypeMeter"
                 />
               </validation-provider>
             </v-col>
@@ -249,7 +233,7 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="2">
+            <v-col md="2" v-if="typeMeterItem.name == 'Underground'">
               <validation-provider
                 vid="meterData.levelStatic"
                 rules="required"
@@ -269,7 +253,7 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="2">
+            <v-col md="2" v-if="typeMeterItem.name == 'Underground'">
               <validation-provider
                 vid="meterData.levelDynamic"
                 rules="required"
@@ -290,7 +274,13 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col md="3">
+            <v-col
+              md="3"
+              v-if="
+                typeMeterItem.name == 'Underground' ||
+                typeMeterItem.name == 'Superficial'
+              "
+            >
               <validation-provider
                 vid="meterData.volMaxMouth"
                 rules="required"
@@ -310,7 +300,13 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="3">
+            <v-col
+              md="3"
+              v-if="
+                typeMeterItem.name == 'Underground' ||
+                typeMeterItem.name == 'Superficial'
+              "
+            >
               <validation-provider
                 vid="meterData.volMaxDay"
                 rules="required"
@@ -319,7 +315,7 @@
                 <v-text-field
                   v-model="meterData.volMaxDay"
                   name="volMaxDay"
-                  label="Volume Máx / Dia"
+                  label="Dias Máx / Mês"
                   type="number"
                   placeholder="Entre com o valor"
                   required
@@ -330,7 +326,14 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="3">
+            <v-col
+              md="3"
+              v-if="
+                typeMeterItem.name == 'Underground' ||
+                typeMeterItem.name == 'Superficial' ||
+                typeMeterItem.name == 'Curve'
+              "
+            >
               <validation-provider
                 vid="meterData.hourMaxDay"
                 rules="required"
@@ -350,7 +353,13 @@
               </validation-provider>
             </v-col>
 
-            <v-col md="3">
+            <v-col
+              md="3"
+              v-if="
+                typeMeterItem.name == 'Residual' ||
+                typeMeterItem.name == 'Curve'
+              "
+            >
               <validation-provider
                 vid="meterData.levelMinResidualFlow"
                 rules="required"
@@ -373,6 +382,11 @@
         </v-form>
       </validation-observer>
     </Form>
+    <FormHydrometer
+      :control="modalHydrometer"
+      :close="closeModalHydrometer"
+      :identifier="modalHydrometerId"
+    />
   </div>
 </template>
 

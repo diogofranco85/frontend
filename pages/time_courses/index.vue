@@ -49,7 +49,6 @@
                   v-model="formData.description"
                   autofocus
                   :disabled="!formActionInsertOrEdit"
-                  :rules="rulesRequired"
                   min="6"
                   :error-messages="errors"
                 />
@@ -65,7 +64,6 @@
                   label="Início"
                   v-model="formData.startDate"
                   :disabled="!formActionInsertOrEdit"
-                  :rules="rulesRequired"
                   type="date"
                   :error-messages="errors"
                 />
@@ -82,7 +80,6 @@
                   label="Término"
                   v-model="formData.endDate"
                   :disabled="!formActionInsertOrEdit"
-                  :rules="rulesRequired"
                   type="date"
                   :error-messages="errors"
                 />

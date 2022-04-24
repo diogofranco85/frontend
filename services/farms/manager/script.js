@@ -44,6 +44,10 @@ export default {
     formMeterRef: null,
 
     meterModal: false,
+    modalHydrometer: false,
+
+    modalHydrometerId: null,
+
     meterData: {
       id: '',
       idFarm: '',
@@ -79,14 +83,11 @@ export default {
       loading: 'Gerenciar/getLoading',
 
       meterItems: 'Meter/getData',
-      meterMessage: 'DescriptiveItems/getMessage',
-      meterError: 'DescriptiveItems/getErrors',
-
+      meterMessage: 'Meter/getMessage',
+      meterError: 'Meter/getError',
 
       typeMeter: 'DescriptiveItems/getData',
-
-
-
+      typeMeterItem: 'DescriptiveItems/getItem',
       outorgas: 'Outorgas/getData'
     })
   },
@@ -115,17 +116,37 @@ export default {
       }
     },
 
+    meterMessage(value, oldValue) {
+      if (value != '') {
+        if (this.meterError == true) {
+          this.$swal.fire({
+            type: 'error',
+            title: 'Error ao processar requisição',
+            text: value
+          })
+        } else {
+          this.$swal.fire({
+            type: 'success',
+            title: 'Dados salvo com sucesso',
+            text: 'Os dados foram salvos com sucesso'
+          })
+          this.loadData();
+          this.meterModal = false;
+        }
+      }
+    },
+
     MeterItem(value, oldValue) {
       if (value !== oldValue) {
-        this.meterForm.id = value.id;
-        this.meterForm.idTypeMeter = value.idTypeMeter;
-        this.meterForm.idOutorga = value.idOutorga;
-        this.meterForm.valueHydrometer = value.valueHydrometer;
-        this.meterForm.valueHourley = value.valueHourley;
-        this.meterForm.volMaxMounth = value.volMaxMounth;
-        this.meterForm.volMaxDay = value.volMaxDay;
-        this.meterForm.hourMaxDay = value.hourMaxDay;
-        this.meterForm.levelMinResidualFlow = value.levelMinResidualFlow;
+        this.meterData.id = value.id;
+        this.meterData.idTypeMeter = value.idTypeMeter;
+        this.meterData.idOutorga = value.idOutorga;
+        this.meterData.valueHydrometer = value.valueHydrometer;
+        this.meterData.valueHourley = value.valueHourley;
+        this.meterData.volMaxMounth = value.volMaxMounth;
+        this.meterData.volMaxDay = value.volMaxDay;
+        this.meterData.hourMaxDay = value.hourMaxDay;
+        this.meterData.levelMinResidualFlow = value.levelMinResidualFlow;
         this.meterModal = true;
       }
     },
@@ -200,6 +221,11 @@ export default {
       this.$store.dispatch('DescriptiveItems/GET_DATA', { name: 'key-type-meter' });
     },
 
+    changeTypeMeter() {
+      if (this.meterData.idTypeMeter)
+        this.$store.dispatch('DescriptiveItems/GET_ITEM', this.meterData.idTypeMeter);
+    },
+
     clearMeterInput() {
       this.meterData.id = '';
       this.meterData.levelStatic = '';
@@ -218,7 +244,7 @@ export default {
     },
 
     selectMeter() {
-      this.$store.dispatch('DescriptiveItems/GET_ITEM', this.meterForm.idTypeMeter);
+      this.$store.dispatch('DescriptiveItems/GET_ITEM', this.meterData.idTypeMeter);
     },
 
 
@@ -238,6 +264,8 @@ export default {
       this.$refs.formMeterRef.validate()
         .then(success => {
           if (success) {
+            this.transformValue();
+            this.meterData.id = null;
             this.$store.dispatch('Meter/SET_DATA', {
               typeOperation: this.formAction,
               data: this.meterData
@@ -267,6 +295,30 @@ export default {
 
     gridActDelete(id) {
       alert('del' + id);
+    },
+
+    transformValue() {
+      this.meterData.levelStatic = parseFloat(this.meterData.levelStatic);
+      this.meterData.levelDynamic = parseFloat(this.meterData.levelDynamic);
+      this.meterData.idTypeMeter = parseFloat(this.meterData.idTypeMeter);
+      this.meterData.idOutorga = parseFloat(this.meterData.idOutorga);
+      this.meterData.valueHydrometer = parseFloat(this.meterData.valueHydrometer)
+      this.meterData.valueHourley = parseFloat(this.meterData.valueHourley)
+      this.meterData.volMaxMouth = parseFloat(this.meterData.volMaxMouth)
+      this.meterData.volMaxDay = parseFloat(this.meterData.volMaxDay)
+      this.meterData.hourMaxDay = parseFloat(this.meterData.hourMaxDay)
+      this.meterData.levelMinResidualFlow = parseFloat(this.meterData.levelMinResidualFlow)
+    },
+
+    openModalHydrometer(id) {
+      this.modalHydrometerId = id;
+      this.$store.dispatch('Hydrometer/GET_LIST', id);
+      this.modalHydrometer = true;
+
+    },
+
+    closeModalHydrometer() {
+      this.modalHydrometer = false;
     }
   }
 

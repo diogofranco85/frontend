@@ -19,11 +19,17 @@ export async function post(url, param, tipoHeader, converterData) {
 
 }
 
-export async function get(url, tipoHeader) {
+export async function get(url, tipoHeader, queryString) {
   const headers = await Headers(tipoHeader)
 
   return await api.get(url, {
-    headers
+    headers,
+    params: { ...queryString },
+    paramsSerializer: function paramsSerializer(params) {
+      return Object.entries(Object.assign({}, params, {})).
+        map(([key, value]) => `${key}=${value}`).
+        join('&');
+    }
   })
 }
 

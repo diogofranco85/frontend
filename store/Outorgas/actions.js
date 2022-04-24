@@ -43,7 +43,6 @@ export default {
 
     get(`/outorgas/farm/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
-        console.log(response.data);
         commit('setData', response.data.result);
         commit('setLoading', false);
         commit('setError', false);

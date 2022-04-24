@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex';
 import { swal, toast } from '~/utils/alert';
 import moment from 'moment';
+import { get, post } from '../../../utils/api';
 export default {
   data: () => ({
     items: [
@@ -25,6 +26,11 @@ export default {
       idTypeMeter: ''
     },
 
+    queryString: {
+      idTypeMeter: null,
+      idFarm: null,
+    },
+
     limitHourDay: 0,
     limitHorimeterDay: 0,
 
@@ -41,40 +47,12 @@ export default {
     fieldsetView: false,
 
 
-    contHidro: 1,
+    contHidro: 3,
 
     field: {
-
-      hydro01: {
-        name: '',
-        id: '',
-        hour: '',
-        value: ''
-      },
-      hydro02: {
-        name: '',
-        id: '',
-        hour: '',
-        value: ''
-      },
-      hydro03: {
-        name: '',
-        id: '',
-        hour: '',
-        value: ''
-      },
-      hydro04: {
-        name: '',
-        id: '',
-        hour: '',
-        value: ''
-      },
-      hydro05: {
-        name: '',
-        id: '',
-        hour: '',
-        value: ''
-      },
+      hydro: [],
+      hour: [],
+      id: [],
     },
 
     gridActions: [
@@ -98,7 +76,9 @@ export default {
       { text: 'H/dia estático', value: 'hoursDay', class: 'blue-grey lighten-4' },
       { text: 'Média Dia', value: 'averageCapital', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
-    ]
+    ],
+
+    itemGridMeterList: []
   }),
 
   computed: {
@@ -116,22 +96,31 @@ export default {
       farmError: 'Farm/getError',
       hydrometerError: 'Hydrometer/getError',
       timeCoursesError: 'TimeCourses/getError',
-      levelError: 'Level/getError',
 
       clientMessage: 'Client/getMessage',
       farmMessage: 'Farm/getMessage',
       hydrometerMessage: 'Hydrometer/getMessage',
       TimeCoursesMessage: 'TimeCourses/getMessage',
-      levelMessage: 'Level/getMessage',
 
       flowSheets: 'FlowSheet/getData',
       flowSheetsMessage: 'FlowSheet/getMessage',
       flowSheetsError: 'FlowSheet/getError',
-      loading: 'FlowSheet/getLoading'
+      loading: 'FlowSheet/getLoading',
+
+      listHydrometers: 'HydromterFlow/getData',
+
+      meterItem: 'Meter/getItem'
     })
   },
 
   watch: {
+    meterItem(value, oldValue) {
+      if (value != oldValue || value != {}) {
+        this.itemGridMeterList = [
+          { ...value }
+        ];
+      }
+    },
     typeSheet(value, oldValue) {
       if (value != oldValue) {
         value.map(item => {
@@ -195,13 +184,6 @@ export default {
       }
     },
 
-    level(value) {
-      if (value !== {}) {
-        this.formData.levelStatic = value.valueHydrometer;
-        this.formData.levelDynamic = value.valueHourley;
-      }
-    },
-
     farmItem(value) {
       if (value !== {}) {
         this.limitHorimeterDay = value.limitHorimeterDay;
@@ -237,15 +219,6 @@ export default {
       }
     },
 
-    levelMessage(value) {
-      if (value !== '') {
-        if (this.levelError === true) {
-          swal(this, value, 'error');
-          this.formShow = false;
-        }
-      }
-    },
-
     flowSheetsMessage(value) {
       if (value !== '') {
         if (this.flowSheetsError === true) {
@@ -271,17 +244,28 @@ export default {
   },
 
   mounted() {
-    const data = ['Ruler', 'Static', 'Curve'];
-    this.loadClient();
+    const data = ['Superficial', 'Underground', 'Curve'];
     this.$store.dispatch('DescriptiveItems/GET_BY_KEY', data);
     this.$store.dispatch('FlowSheet/CLEAR_DATA');
-    this.$store.dispatch('TimeCourses/GET_LIST');
   },
 
 
   methods: {
     loadClient() {
+      this.$store.dispatch('HydromterFlow/CLEAR_DATA');
       this.$store.dispatch('Client/GET_LIST');
+    },
+
+    onChangeTypeMeter() {
+      this.formShow = false;
+      this.formData.idFarm = null;
+      this.formData.idClient = null;
+      this.formData.idTimesCourses = null;
+      this.fieldsetView = false;
+      this.selectFarm = [];
+      this.selectClient = []
+      this.selectTimeCourses = [];
+      this.loadClient();
     },
 
     onChangeClient() {
@@ -289,34 +273,38 @@ export default {
       this.formData.idFarm = null;
       this.fieldsetView = false;
       this.selectFarm = [];
-      this.$store.dispatch('Farm/GET_LIST_BY_TYPE', { id: this.formData.idClient, type: this.typeSheet.id });
+      this.$store.dispatch('Farm/GET_LIST_BY_TYPE', { id: this.formData.idClient, type: this.formData.idTypeMeter });
     },
 
     onChangeFarm() {
+      this.$store.dispatch('TimeCourses/GET_LIST');
+      this.$store.dispatch('HydromterFlow/CLEAR_DATA');
+    },
+
+    onChangeTimeCourse() {
       this.formShow = false;
       this.fieldsetView = true;
+
+      this.$store.dispatch('HydromterFlow/GET_LIST', {
+        idTypeMeter: this.formData.idTypeMeter,
+        idFarm: this.formData.idFarm
+      });
+
+      this.$store.dispatch('Meter/GET_ITEM', this.formData.idTypeMeter);
+
+
       this.formData.calculationDate = this.formatDate(Date.now());
     },
+
 
     formatDate(date) {
       return moment(date).format('YYYY-MM-DD');
     },
 
-    getDataFlow() {
-
-      const dataFlow = {
-        idClient: this.formData.idClient,
-        idFarm: this.formData.idFarm,
-        idHydrometer: this.formData.idHydrometer,
-        idTimesCourses: this.formData.idTimesCourses
-      };
-
-      this.$store.dispatch('FlowSheet/GET_LIST', dataFlow);
+    async addMeter() {
+      await post('/teste/index', this.field, 'COM_TOKEN_USUARIO');
     },
 
-    newData() {
-      this.$store.dispatch('FlowSheet/SET_DATA', this.formData);
-    },
 
     delData(params) {
       this.$swal.fire({

@@ -1,7 +1,7 @@
-export default () => ({
+export default  () => ({
   data: [],
   item: {},
   loading: false,
   error: false,
-  message: '',
+  message: false,
 })

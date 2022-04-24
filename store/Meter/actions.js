@@ -41,7 +41,7 @@ export default {
     commit('setError', false);
     commit('setMessage', '');
     if (payload.typeOperation !== 'edit') {
-      await post('/meter/create', payload, 'COM_TOKEN_USUARIO')
+      await post('/meter/create', payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
           commit('setMessage', 'Horimetro cadastrado com sucesso');

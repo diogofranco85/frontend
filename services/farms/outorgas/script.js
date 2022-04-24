@@ -80,7 +80,6 @@ export default {
 
     dataStore(value) {
       if (value !== []) {
-        console.log('grid', value);
         this.datagrid = value;
       }
     },

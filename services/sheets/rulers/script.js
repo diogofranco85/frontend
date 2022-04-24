@@ -202,7 +202,7 @@ export default {
 
   mounted() {
     this.loadClient();
-    const data = ['Ruler']
+    const data = ['Residual']
     this.$store.dispatch('FlowRules/CLEAR_DATA');
     this.$store.dispatch('DescriptiveItems/GET_BY_KEY', data);
   },

@@ -1,12 +1,13 @@
 import { get, post, put } from "~/utils/api";
 
 export default {
-  async GET_LIST({ commit }) {
+  async GET_LIST({ commit }, payload) {
 
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-    await get('/time/course/list', 'COM_TOKEN_USUARIO')
+
+    await get(`/fullsection/farm/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -15,15 +16,15 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
   async GET_ITEM({ commit }, payload) {
     commit('setLoading', true);
     commit('setError', false);
-    commit('setMessage', '');
-    await get(`/time/course/${payload}/find`, 'COM_TOKEN_USUARIO')
+
+    await get(`/fullsection/${payload}/find`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setItem", result);
@@ -32,7 +33,7 @@ export default {
       .catch(err => {
         commit('setError', true);
         commit('setLoading', false);
-        commit('setMessage', err?.response?.data?.message || err?.message);
+        commit('setMessage', err.response.data.message);
       });
   },
 
@@ -41,28 +42,36 @@ export default {
     commit('setError', false);
     commit('setMessage', '');
     if (payload.typeOperation !== 'edit') {
-      await post('/time/course/create', payload.data, 'COM_TOKEN_USUARIO')
+      await post('/fullsection/create', payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Dados incluídos com sucesso');
+          commit('setMessage', response.data.message || 'Medição incluída com sucesso');
         })
         .catch((err) => {
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', err.response?.data?.message || err);
+          commit('setMessage', err.response.data.message);
         });
     } else {
-      await put(`/time/course/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
+      await put(`/fullsection/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
         .then((response) => {
           commit('setLoading', false);
-          commit('setMessage', 'Dados alterados com sucesso');
+          commit('setMessage', response.data.message || 'Medição alterada com sucesso');
         })
         .catch((err) => {
           commit('setLoading', false);
           commit('setError', true);
-          commit('setMessage', err.response.data.message || err);
+          commit('setMessage', err.response.data.message);
         })
     }
+
+  },
+  CLEAR_DATA({ commit }) {
+    commit('setLoading', true);
+    commit('setData', []);
+    commit('setError', false);
+    commit('setLoading', false);
+
   }
 
 }

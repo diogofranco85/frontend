@@ -67,7 +67,7 @@
               <validation-provider
                 vid="formData.document"
                 v-slot="{ errors }"
-                :rules="{ required: true, min: 11 }"
+                :rules="{ required: true, min: 10 }"
               >
                 <v-text-field
                   label="CNPJ"
@@ -122,7 +122,7 @@
               <validation-provider
                 vid="formData.street"
                 v-slot="{ errors }"
-                :rules="{ required: true, min: 10 }"
+                :rules="{ required: true }"
               >
                 <v-text-field
                   label="Endereço"

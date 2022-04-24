@@ -16,13 +16,6 @@ export default {
       startDate: '',
       endDate: '',
     },
-    rulesRequired: [
-      (v) => !!v || 'Este campo é obrigatório',
-    ],
-    rulesRequiredMin6: [
-      (v) => !!v || 'Este campo é obrigatório',
-      (v) => v.length > 5 || 'Este campo deve conter no minimo 6 caracteres'
-    ],
     items: [
       { text: 'Home', to: "home", nuxt: true },
       { text: 'Clientes', to: "clients", disabled: true },

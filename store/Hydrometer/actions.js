@@ -6,7 +6,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-    await get(`/hydrometer/farm/${payload}/list`, 'COM_TOKEN_USUARIO')
+    await get(`/hydrometer/meter/${payload}/list`, 'COM_TOKEN_USUARIO')
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -40,7 +40,7 @@ export default {
     commit('setLoading', true);
     commit('setError', false);
     commit('setMessage', '');
-    await post('/hydrometer/create', payload, 'COM_TOKEN_USUARIO')
+    await post('/hydrometer/create', payload.data, 'COM_TOKEN_USUARIO')
       .then((response) => {
         commit('setLoading', false);
         commit('setMessage', response.data.message || 'Hidrometro incluído com sucesso');
@@ -67,6 +67,12 @@ export default {
         commit('setError', true);
         commit('setMessage', err.response.data.message || err);
       })
+  },
+
+  async LIMPAR_MENSAGEM({ commit }) {
+    commit('setLoading', false);
+    commit('setError', false);
+    commit('setMessage', '');
   }
 
 }

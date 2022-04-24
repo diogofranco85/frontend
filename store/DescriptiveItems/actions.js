@@ -1,4 +1,4 @@
-import { get, post } from "~/utils/api";
+import { get, post, put } from "~/utils/api";
 
 export default {
   GET_DATA: async ({ commit }, payload) => {
@@ -8,10 +8,9 @@ export default {
 
       const { data } = await get(`/descriptives/name/${payload.name}/items/find`, 'COM_TOKEN_USUARIO');
       commit('setData', data.result);
-
       commit('setLoading', false);
     } catch (err) {
-      commit('setMessage', err.response.data.message);
+      commit('setMessage', err.response?.data?.message);
       commit('setLoading', false);
       commit('setError', true)
     }
@@ -31,7 +30,6 @@ export default {
 
       commit('setLoading', false);
     } catch (err) {
-      console.log(err);
       commit('setMessage', err?.response?.data?.message);
       commit('setLoading', false);
       commit('setError', true)
@@ -42,11 +40,8 @@ export default {
     try {
       commit('setLoading', true);
       commit('setError', false);
-
       const { data } = await get(`/descriptives/items/${payload}/find`, 'COM_TOKEN_USUARIO');
-
       commit('setItem', data.result);
-
       commit('setLoading', false);
     } catch (err) {
       commit('setMessage', err.response.data.message);
@@ -55,6 +50,36 @@ export default {
     }
   },
 
+  async SET_DATA({ commit }, payload) {
+    commit('setLoading', true);
+    commit('setError', false);
+    commit('setMessage', '');
+    if (payload.typeOperation !== 'edit') {
+      await post('/descriptives/items/create', payload.data, 'COM_TOKEN_USUARIO')
+        .then(() => {
+          commit('setLoading', false);
+          commit('setMessage', 'Configuração incluído com sucesso');
+          commit('setError', 'false');
+        })
+        .catch((err) => {
+          commit('setLoading', false);
+          commit('setError', true);
+          commit('setMessage', err.response.data.message);
+        });
+    } else {
+      await put(`/descriptives/items/${payload.data.id}/edit`, payload.data, 'COM_TOKEN_USUARIO')
+        .then(() => {
+          commit('setLoading', false);
+          commit('setMessage', 'Configuração alterado com sucesso');
+          commit('setError', 'false');
+        })
+        .catch((err) => {
+          commit('setLoading', false);
+          commit('setError', true);
+          commit('setMessage', err.response.data.message);
+        })
+    }
+  },
 
 
   LIMPAR_MENSAGEM: ({ commit }) => {
