@@ -50,17 +50,17 @@ export default {
 
     meterData: {
       id: '',
-      idFarm: '',
-      idTypeMeter: '',
-      idOutorga: '',
-      levelStatic: '',
-      levelDynamic: '',
-      valueHydrometer: '',
-      valueHourley: '',
-      volMaxMouth: '',
-      volMaxDay: '',
-      hourMaxDay: '',
-      levelMinResidualFlow: '',
+      idFarm: null,
+      idTypeMeter: null,
+      idOutorga: null,
+      levelStatic: 0,
+      levelDynamic: 0,
+      valueHydrometer: 0,
+      valueHourley: 0,
+      volMaxMouth: 0,
+      volMaxDay: 0,
+      hourMaxDay: 0,
+      levelMinResidualFlow: 0,
     },
 
     farmData: {
@@ -228,10 +228,10 @@ export default {
 
     clearMeterInput() {
       this.meterData.id = '';
-      this.meterData.levelStatic = '';
-      this.meterData.levelDynamic = '';
-      this.meterData.idTypeMeter = '';
-      this.meterData.idOutorga = '';
+      this.meterData.levelStatic = 0;
+      this.meterData.levelDynamic = 0;
+      this.meterData.idTypeMeter = null;
+      this.meterData.idOutorga = null;
       this.meterData.valueHydrometer = 0;
       this.meterData.valueHourley = 0;
       this.meterData.volMaxMouth = 0;
