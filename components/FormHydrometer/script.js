@@ -9,6 +9,7 @@ export default {
   props: {
     control: Boolean,
     close: Function,
+    idFarm: String,
     identifier: {
       default: null,
       type: Number
@@ -87,7 +88,6 @@ export default {
   },
 
   identifier(value, oldValue) {
-    console.log('identificador', value);
     if (value != oldValue) {
       this.loadData();
     }
@@ -108,8 +108,10 @@ export default {
     },
 
     clearForm() {
-      this.formData.identifier = null,
-        this.formData.tag = null;
+      this.formData.identifier = null;
+      this.formData.tag = null;
+      this.formData.initialHourValue = 0;
+      this.formData.initialHydroValue = 0;
     },
 
     saveData() {

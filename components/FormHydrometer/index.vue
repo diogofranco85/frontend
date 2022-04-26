@@ -93,6 +93,7 @@
                               placeholder="Entre com o valor"
                               required
                               dense
+                              outlined
                               :error-messages="errors"
                             />
                           </validation-provider>
@@ -111,6 +112,7 @@
                               placeholder="Entre com o valor"
                               required
                               dense
+                              outlined
                               :error-messages="errors"
                             />
                           </validation-provider>
