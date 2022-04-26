@@ -7,12 +7,30 @@ export default {
     commit('setError', false);
     commit('setMessage', '');
 
-    const { idClient, idFarm, idHydrometer, idTimesCourses } = payload;
-
-    await get(`/flowsheets/client/${idClient}/farm/${idFarm}/hydrometer/${idHydrometer}/timecourses/${idTimesCourses}/list`, 'COM_TOKEN_USUARIO')
+    await get(`/flowsheets/list/`, 'COM_TOKEN_USUARIO', payload)
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
+        commit('setLoading', false);
+      })
+      .catch(err => {
+        commit('setError', true);
+        commit('setLoading', false);
+        commit('setMessage', err.response?.data?.message);
+      });
+  },
+
+  async GET_SPENT({ commit }, payload) {
+
+    commit('setLoading', true);
+    commit('setError', false);
+    commit('setMessage', '');
+
+    await get(`/flowsheets/sumspent`, 'COM_TOKEN_USUARIO', payload)
+      .then(response => {
+        const { result } = response.data;
+        console.log(result);
+        commit("setItem", result);
         commit('setLoading', false);
       })
       .catch(err => {
@@ -60,6 +78,7 @@ export default {
     commit('setError', false);
     commit('setLoading', false);
     commit("setData", []);
+    commit("setItem", null);
   }
 
 }

@@ -30,6 +30,8 @@ export default {
       { text: 'Cód', value: 'id', class: 'blue-grey lighten-4' },
       { text: 'Identificador', value: 'identifier', class: 'blue-grey lighten-4' },
       { text: 'TAG', value: 'tag', class: 'blue-grey lighten-4' },
+      { text: 'Horimetro Inicial', value: 'initialHourValue', class: 'blue-grey lighten-4' },
+      { text: 'Hidrometro Inicial', value: 'initialHydroValue', class: 'blue-grey lighten-4' },
       { text: 'Ações', value: "acoes", class: "blue-grey lighten-4", sortable: false }
     ],
     gridActions: [

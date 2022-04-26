@@ -58,7 +58,7 @@
           <v-col md="2">
             <v-select
               :items="selectTimeCourses"
-              v-model="formData.idTimesCourse"
+              v-model="formData.idTimesCourses"
               label="Período"
               name="Periodo"
               @change="onChangeTimeCourse"
@@ -87,19 +87,21 @@
                 name="hidro-05"
                 v-model="field.hydro[index]"
                 :label="`Volume de ${item.identifier}`"
-                flat
+                color="teal"
                 outlined
                 dense
-                filled
+                type="number"
+                :value="0"
               />
               <v-text-field
                 name="hidro-01"
                 v-model="field.hour[index]"
                 :label="`Horas de ${item.identifier}`"
-                flat
+                color="teal"
                 outlined
+                :value="0"
+                type="number"
                 dense
-                filled
               />
               <input
                 name="id"
@@ -108,7 +110,7 @@
                 :value="(field.id[index] = item.id)"
                 label=""
                 outlined
-                flat
+                color="teal"
                 dense
               />
             </v-card>
@@ -161,7 +163,7 @@
             <tbody style="font-size: 10px">
               <tr v-for="itemGrid in itemGridMeterList" :key="itemGrid.id">
                 <td>
-                  <strong>{{ itemGrid.outorga.concierge }}</strong>
+                  <strong>{{ itemGrid.Outorga.concierge }}</strong>
                 </td>
                 <td>
                   <strong>{{ itemGrid.levelStatic }}</strong>
@@ -201,84 +203,28 @@
             <thead>
               <tr>
                 <th class="text-center blue lighten-4">Data lançamento</th>
-                <th class="text-center">Hidro 1</th>
-                <th class="text-center">Hori 1</th>
-                <th class="text-center">Hidro 2</th>
-                <th class="text-center">Hori 2</th>
-                <th class="text-center">Hidro 3</th>
-                <th class="text-center">Hori 3</th>
-                <th class="text-center">Hidro 4</th>
-                <th class="text-center">Hori 4</th>
-                <th class="text-center">Hidro 5</th>
-                <th class="text-center">Hori 5</th>
+                <fragment v-for="item in listHydrometers" :key="item.id">
+                  <th class="text-center">M³/{{ item.identifier }}</th>
+                  <th class="text-center">Hr/{{ item.identifier }}</th>
+                </fragment>
                 <th class="text-center">M³/Dia</th>
-                <th class="text-center">h/Dia</th>
-                <th class="text-center">Captada Dia</th>
+                <th class="text-center">Hr/Dia</th>
+                <th class="text-center">Média/Dia</th>
                 <th class="text-center grey">Ações</th>
               </tr>
             </thead>
             <tbody style="font-size: 10px">
-              <tr>
-                <td class="text-center">18/04/2022</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center red lighten-4">591626,55</td>
-                <td class="text-center red lighten-4">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">1.0</td>
-                <td class="text-center">2.0</td>
-                <td class="text-center">3.0</td>
+              <tr v-for="list in datagrid.data" :key="list.id">
+                <td class="text-center">{{ list.dateInclude }}</td>
+                <fragment v-for="item in list.items" :key="item.id">
+                  <td class="text-center">{{ item.horimeter }}</td>
+                  <td class="text-center">{{ item.hourmeter }}</td>
+                </fragment>
+                <td class="text-center">{{ list.calcHori }}</td>
+                <td class="text-center">{{ list.calcHour }}</td>
+                <td class="text-center">{{ list.media }}</td>
                 <td class="text-center">
-                  <v-btn outlined color="red lighten-2">
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="text-center">18/04/2022</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center red lighten-4">591626,55</td>
-                <td class="text-center red lighten-4">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">1.0</td>
-                <td class="text-center">2.0</td>
-                <td class="text-center">3.0</td>
-                <td class="text-center">
-                  <v-btn outlined color="red lighten-2">
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="text-center">18/04/2022</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center red lighten-4">591626,55</td>
-                <td class="text-center red lighten-4">14297,16</td>
-                <td class="text-center">591626,55</td>
-                <td class="text-center">14297,16</td>
-                <td class="text-center">1.0</td>
-                <td class="text-center">2.0</td>
-                <td class="text-center">3.0</td>
-                <td class="text-center">
-                  <v-btn outlined color="red lighten-2">
+                  <v-btn outlined color="red lighten-2" @click="delData(list)">
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </td>
@@ -286,6 +232,22 @@
             </tbody>
           </template>
         </v-simple-table>
+        <v-row>
+          <v-simple-table>
+            <thead>
+              <tr>
+                <th class="text-center grey lighten-4">Dias Mês</th>
+                <th class="text-center grey lighten-4">Volume</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 10px">
+              <tr>
+                <td width="200px" class="text-center">{{ datagrid.days }}</td>
+                <td width="200px" class="text-center">{{ datagrid.volume }}</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-row>
       </v-card-text>
     </v-card>
     <!-- <div outlined v-if="flowSheets.length > 0">

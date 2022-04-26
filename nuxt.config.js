@@ -37,7 +37,8 @@ export default {
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/v-mask', ssr: false },
     { src: '~/plugins/google-maps', ssr: false },
-    { src: "~/plugins/vee-validate" }
+    { src: "~/plugins/vee-validate" },
+    { src: "~plugins/fragment" }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

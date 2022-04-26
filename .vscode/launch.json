@@ -7,9 +7,16 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch chrome localhost",
+      "name": "Launch chrome localhost - Nuxt",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "/bin/firefox",
+      "runtimeArgs": [
+        "localhost:3000"
+      ],
+      "linux": {
+        "program": "${workspaceFolder}/node_modules/.bin/nuxt"
+      },
     }
-  ]
+  ],
 }

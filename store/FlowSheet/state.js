@@ -1,6 +1,6 @@
-export default  () => ({
+export default () => ({
   data: [],
-  item: {},
+  item: null,
   loading: false,
   error: false,
   message: false,

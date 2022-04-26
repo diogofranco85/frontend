@@ -36,6 +36,23 @@ export default {
       });
   },
 
+  async GET_ITEM_FLOW({ commit }, payload) {
+    commit('setLoading', true);
+    commit('setError', false);
+    commit('setMessage', '');
+    await get(`/meter/find`, 'COM_TOKEN_USUARIO', payload)
+      .then(response => {
+        const { result } = response.data;
+        commit("setItem", result);
+        commit('setLoading', false);
+      })
+      .catch(err => {
+        commit('setError', true);
+        commit('setLoading', false);
+        commit('setMessage', err.response.data.message);
+      });
+  },
+
   async SET_DATA({ commit }, payload) {
     commit('setLoading', true);
     commit('setError', false);

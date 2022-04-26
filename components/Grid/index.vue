@@ -89,9 +89,10 @@
           <v-spacer />
           <v-text-field
             v-model="search"
-            label="Pesquisar"
+            label="Pesquisar dados"
             class="mx-4"
-            dense
+            prepend-inner-icon="mdi-file-search"
+            clearable
           ></v-text-field>
         </div>
       </template>
