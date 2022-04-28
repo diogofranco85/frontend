@@ -7,9 +7,7 @@ export default {
     commit('setError', false);
     commit('setMessage', '');
 
-    const { idClient, idFarm, idHydrometer, idTimesCourses } = payload;
-
-    await get(`/flowrules/client/${idClient}/farm/${idFarm}/hydrometer/${idHydrometer}/timecourses/${idTimesCourses}/list`, 'COM_TOKEN_USUARIO')
+    await get(`/flowrules/list`, 'COM_TOKEN_USUARIO', payload)
       .then(response => {
         const { result } = response.data;
         commit("setData", result);
@@ -60,6 +58,7 @@ export default {
     commit('setError', false);
     commit('setLoading', false);
     commit("setData", []);
+    commit("setItem", null);
   }
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page a4">
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
       <p>

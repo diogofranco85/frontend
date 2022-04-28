@@ -319,7 +319,6 @@ export default {
 
       if (this.field.id.length > 0) {
         this.field.id.map((item, index) => {
-          console.log([this.field.hour[index], this.field.hydro[index]])
           if (this.field.hour[index] == '' || this.field.hydro[index] == '' || this.field.hour[index] == undefined || this.field.hydro[index] == undefined) {
             this.$swal.fire({
               title: 'Validação de campos',
@@ -344,7 +343,6 @@ export default {
     },
 
     delData(params) {
-      console.log(params);
       this.$swal.fire({
         title: 'Excluir dados',
         text: `Excluir lançamento do dia ${params.dateInclude}`,
@@ -459,8 +457,6 @@ export default {
         days: listItem.length,
         volume: volume.toFixed(1)
       };
-
-      console.log(result);
 
       return result;
 
